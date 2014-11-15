@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="fordhamcss.pandoraskey3.MainActivity" >
+    tools:context="fordhamcss.pandorakey4.MainActivity" >
 
     <item
         android:id="@+id/action_settings"
