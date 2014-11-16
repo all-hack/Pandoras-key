@@ -1,9 +1,14 @@
 //Test change
 package fordhamcss.pandorakey4;
 
+import java.util.LinkedList;
+
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +16,16 @@ import android.widget.Button;
 
 
 public class MainActivity extends Activity {
-
+	
+	
+	
+	// Array used to store events as they are generated
+	LinkedList<Event> eventList = new LinkedList<Event>();
+	
+	// initial contact list is saved
+	ContentResolver cr = getContentResolver();
+	Cursor initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+	
 	MyService serviceBinder;
     Intent i;
 	
@@ -48,6 +62,45 @@ public class MainActivity extends Activity {
     {
         stopService(new Intent(getBaseContext(), MyService.class));
     }
+    
+    // Checks contacts
+	public void checkContacts(){
+		
+		LinkedList<String> theList = new LinkedList<String>();
+		
+		ContentResolver cr2 = getContentResolver();
+		Cursor newContactList = cr2.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+		
+		int diff = newContactList.getCount() - initialContactList.getCount();
+		
+		while(diff > 0) {
+			initialContactList.moveToNext();
+			newContactList.moveToNext();
+
+			if(initialContactList.getString(initialContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+					!= newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))); {
+						theList.add(newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+						newContactList.moveToNext();
+						diff--;
+					}
+		}
+		// overwrites the initial contact list for next check
+		initialContactList = newContactList;
+		
+		// generates the time
+		int time = (int) (System.currentTimeMillis());
+		
+		// calls function that creates contact objects
+		for(int i = 0; i < theList.size(); i++) {
+			createContact(theList.get(i), time);
+		}
+	}
+	
+	// creates contact objects
+	public void createContact(String inName, int inTime) {
+		ContactEvent newContact = new ContactEvent(inTime, "Some Location", inName);
+		eventList.add(newContact);
+	}
     
 
     @Override
