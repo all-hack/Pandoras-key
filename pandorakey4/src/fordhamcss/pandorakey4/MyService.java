@@ -1,19 +1,18 @@
 package fordhamcss.pandorakey4;
 
-import android.app.Service; 
-import android.content.Intent; 
-import android.os.IBinder; 
-import android.widget.Toast;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -43,6 +42,14 @@ public class MyService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// We want this service to continue running until it is explicitly  stopped, so return sticky.
+		
+		
+		/* Use the LocationManager class to obtain GPS locations */
+		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		LocationListener mlocListener = new MyLocationListener();
+		// below updates on time interval (mill seconds) AND location (meters)
+		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
+				 1000, 0, mlocListener);
 		
 		Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 
@@ -122,6 +129,39 @@ public class MyService extends Service {
 		The onDestroy() method is called when the service is stopped using the stopService() method. 
 		This is where you clean up the resources used by your service.
 	 */
+    
+    
+public class MyLocationListener implements LocationListener {
+		
+		@Override
+		public void onLocationChanged(Location loc) {
+		loc.getLatitude();
+		loc.getLongitude();
+		String Text = "My current location is: " + "Latitud = "
+		+ loc.getLatitude() + "Longitud = " + loc.getLongitude();
+		Toast.makeText( getApplicationContext(),
+		Text,
+		Toast.LENGTH_SHORT).show();
+		}
+		@Override
+		public void onProviderDisabled(String provider) {
+		Toast.makeText( getApplicationContext(),
+		"Gps Disabled",
+		Toast.LENGTH_SHORT ).show();
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+		Toast.makeText( getApplicationContext(),
+		"Gps Enabled",
+		Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+		}
+		}/* End of Class MyLocationListener */
+    
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
