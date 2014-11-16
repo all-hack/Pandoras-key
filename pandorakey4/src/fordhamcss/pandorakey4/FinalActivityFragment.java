@@ -11,54 +11,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class FinalActivityFragment extends Fragment{
-	List<String> returnStrings;
+	List<Map<String, String>> returnStrings;
 	ListView mListView;
 	
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
 		setRetainInstance(true);
-
+		
         returnStrings = generateStrings();
-//        System.out.println(returnStrings.get(0));
-//        System.out.println(returnStrings.get(1));
-//        System.out.println(returnStrings.get(2));
-//        System.out.println(returnStrings.get(3));
-        
         setupAdapter();
     }
     
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
-	{
-		View v = inflater.inflate(R.layout.activity_final, container, false);
-		mListView = (ListView) v.findViewById(R.id.listView);
-		
-		setupAdapter(); 
-
-		return v;
-	}
-    
-	void setupAdapter() 
-	{	
-		if (getActivity() == null || mListView == null)
-		{
-			return;
-		}
-		
-		if (returnStrings != null) {
-			System.out.println("Hit");
-			mListView.setAdapter(new ItemAdapter(returnStrings));
-		} else {
-			mListView.setAdapter(null);
-		}
-	}
-	
-    public List<String> generateStrings()
+    public List<Map<String, String>> generateStrings()
     {
     	List<Map<String, String>> serviceAll = new ArrayList<Map<String, String>>();
 		
@@ -89,24 +59,17 @@ public class FinalActivityFragment extends Fragment{
     	serviceAll.add(serviceOutput2);
     	serviceAll.add(serviceOutput3);
     	serviceAll.add(serviceOutput4);
-    	
-    	List<String> returnItems = new ArrayList<String>();
-    	returnItems.add(getOutput(serviceAll.get(0)));
-    	returnItems.add(getOutput(serviceAll.get(1)));
-    	returnItems.add(getOutput(serviceAll.get(2)));
-    	returnItems.add(getOutput(serviceAll.get(3)));
 
-    	return returnItems;
+    	return serviceAll;
     }
 	
-    public String getOutput(Map<String, String> serviceOutput)
+    public String generateOutputString(Map<String, String> serviceOutput)
     {
     	String outputString = null;
     	String username = "Stephen";
     	
-    	if (serviceOutput.get("kind") == "location") //Not working, wait on others to get API working
+    	if (serviceOutput.get("kind") == "location")
     	{
-    		//Dump google maps API
     		outputString = serviceOutput.get("geolocation");
     	}
     	
@@ -136,7 +99,6 @@ public class FinalActivityFragment extends Fragment{
     	
     	else if (serviceOutput.get("kind") == "contact")
     	{
-    		//Future feature: add link to contact
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
     	
@@ -147,24 +109,60 @@ public class FinalActivityFragment extends Fragment{
     			
 		return outputString;
     }
+    
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
+	{
+		View v = inflater.inflate(R.layout.activity_final, container, false);
+		mListView = (ListView) v.findViewById(R.id.listView);
+		setupAdapter(); 
 
-	private class ItemAdapter extends ArrayAdapter<String> {
+		return v;
+	}
+    
+	void setupAdapter() 
+	{	
+		if (getActivity() == null || mListView == null)
+			return;
+		
+		if (returnStrings != null)
+			mListView.setAdapter(new ItemAdapter(returnStrings));
+		else
+			mListView.setAdapter(null);
+	}
 
-		public ItemAdapter(List<String> returnStrings) {
-			super(getActivity(), 0, returnStrings);  //getActivity() is the surrounding Fragment instance's method.
+	private class ItemAdapter extends ArrayAdapter<Map<String, String>> 
+	{
+		public ItemAdapter(List<Map<String, String>> returnStrings) {
+			super(getActivity(), 0, returnStrings);
 		}
 		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {		
-			if (convertView == null) {
-				convertView = getActivity().getLayoutInflater().inflate(
-						R.layout.item_layout, parent, false);
+			if (convertView == null) 
+				convertView = getActivity().getLayoutInflater().inflate(R.layout.item_layout, parent, false);
+
+			if (returnStrings.get(position).get("kind") == "photo")
+			{
+				ImageView imageView = (ImageView) convertView.findViewById(R.id.item_layout_imageView);
+				imageView.setImageResource(R.drawable.ic_launcher);
+				
+				TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
+				textView.setText(returnStrings.get(position).get("timestamp"));
 			}
-
-			TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
-			textView.setText(returnStrings.get(position));
-
+			
+			else if (returnStrings.get(position).get("kind") == "geolocation")
+			{
+				//Somehow use the google API to create 
+			}
+			
+			else //Text output
+			{
+				TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
+				textView.setText(generateOutputString(returnStrings.get(position)));
+			}
+			
 			return convertView;
 		}
+		
 	}
 }
