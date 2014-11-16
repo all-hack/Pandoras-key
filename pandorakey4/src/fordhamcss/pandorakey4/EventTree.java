@@ -2,7 +2,7 @@ package fordhamcss.pandorakey4;
 
 public class EventTree {
 	
-	private EventNode root;
+	public EventNode root;
 	
 	// constructor method
 	public EventTree() {

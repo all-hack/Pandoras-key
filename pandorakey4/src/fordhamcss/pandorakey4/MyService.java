@@ -1,6 +1,11 @@
 package fordhamcss.pandorakey4;
 
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -213,6 +218,8 @@ public class MyService extends Service {
     		theTree.insertEvent(newContactEntry);
     		
     		CurrContact.add(newContact);
+    		
+    		initialContactList = newContactList;
     	}
     }
 
@@ -278,6 +285,18 @@ public class MyService extends Service {
 		}
 		}/* End of Class MyLocationListener */
     
+    public void printTree(EventNode t) {
+    	Toast.makeText( getApplicationContext(),t.theEvent.get(0).toString(),Toast.LENGTH_SHORT).show();
+    	if(t.left != null) {
+    		for(int i=0; i < t.left.theEvent.size(); i++) {
+    			Toast.makeText( getApplicationContext(),t.left.theEvent.get(i).toString(),Toast.LENGTH_SHORT).show();
+    		}
+    	}
+    	if(t.right != null) {
+    		printTree(t.right);
+    	}
+    }
+    
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -294,22 +313,52 @@ public class MyService extends Service {
 					Toast.LENGTH_SHORT).show();
 		}
 		
+		// prints the tree, location first then
+		printTree(theTree.root);
+		
+		
+		
 								
         //if (timer != null){
         //    timer.cancel();
         //}        
-		/*
+		
 		Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();		
-		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(buffer);
-		oos.writeObject(obj);
-		oos.close();
+		
+		
+		/*ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(buffer);
+			oos.writeObject(theTree);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		byte[] rawData = buffer.toByteArray();
 		FileOutputStream outputStream;
-		outputStream = openFileOutput("File", Context.MODE_PRIVATE);
-		outputStream.write(rawData);
-		outputStream.close();
-		*/
+		try {
+			outputStream = openFileOutput("File", Context.MODE_PRIVATE);
+			try {
+				outputStream.write(rawData);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				outputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		
 		
 		
 		
