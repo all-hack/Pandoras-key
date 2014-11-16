@@ -301,7 +301,7 @@ public class MyService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		
-		for(int i=0; i < CurrLocation.size(); i++) {
+		/*for(int i=0; i < CurrLocation.size(); i++) {
 			Toast.makeText( getApplicationContext(),
 					CurrLocation.get(i),
 					Toast.LENGTH_SHORT).show();
@@ -311,10 +311,10 @@ public class MyService extends Service {
 			Toast.makeText( getApplicationContext(),
 					CurrContact.get(i),
 					Toast.LENGTH_SHORT).show();
-		}
+		}*/
 		
 		// prints the tree, location first then
-		 // printTree(theTree.root);
+		  printTree(theTree.root);
 		
 		
 		
