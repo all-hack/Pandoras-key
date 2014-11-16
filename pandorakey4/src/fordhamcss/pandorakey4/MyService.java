@@ -1,29 +1,33 @@
 package fordhamcss.pandorakey4;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.List;
+import java.util.Locale;
 
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
 public class MyService extends Service {
-    int counter = 0;
-    URL[] urls=new URL[5];
+//    int counter = 0;
+//    URL[] urls=new URL[5];
         
-    static final int UPDATE_INTERVAL = 1000;
-    private Timer timer = new Timer();
+//    static final int UPDATE_INTERVAL = 1000;
+//    private Timer timer = new Timer();
 
+	
+	String CurrentLocation = "No Value";
+	
+	
+	
 	/* An abstract method we must implement. 
 	 The onBind() method enables you to bind an activity to a service. 
 	 This in turn enables an activity to directly access members and methods inside a service. 
@@ -50,7 +54,7 @@ public class MyService extends Service {
 		LocationListener mlocListener = new MyLocationListener();
 		// below updates on time interval (mill seconds) AND location (meters)
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-				 1000, 0, mlocListener);
+				 1000, 10, mlocListener);
 		
 /*
 		for (int i=0; i<urls.length; i++) {
@@ -133,19 +137,45 @@ public class MyService extends Service {
 		The onDestroy() method is called when the service is stopped using the stopService() method. 
 		This is where you clean up the resources used by your service.
 	 */
-    
+	private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w("My Current loction address", "" + strReturnedAddress.toString());
+            } else {
+                Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w("My Current loction address", "Canont get Address!");
+        }
+        return strAdd;
+    }
     
     public class MyLocationListener implements LocationListener {
 		
 		@Override
 		public void onLocationChanged(Location loc) {
-		loc.getLatitude();
-		loc.getLongitude();
-		String Text = "My current location is: " + "Latitud = "
-		+ loc.getLatitude() + "Longitud = " + loc.getLongitude();
-		Toast.makeText( getApplicationContext(),
-		Text,
-		Toast.LENGTH_SHORT).show();
+		double lat = loc.getLatitude();
+		double lon = loc.getLongitude();
+		
+		//String Text = "My current location is: " + "Latitud = "
+		//+ loc.getLatitude() + "Longitud = " + loc.getLongitude();
+		
+		String Text = getCompleteAddressString(lat, lon);
+		
+		
+		Toast.makeText( getApplicationContext(),Text, Toast.LENGTH_SHORT).show();
+		
 		}
 		@Override
 		public void onProviderDisabled(String provider) {
@@ -170,9 +200,9 @@ public class MyService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		
-        if (timer != null){
-            timer.cancel();
-        }
+        //if (timer != null){
+        //    timer.cancel();
+        //}
         
 		Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
 	}
