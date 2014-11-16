@@ -53,6 +53,7 @@ public class FinalActivityFragment extends Fragment{
     	Map<String, String> serviceOutput4 = new HashMap<String, String>();
     	serviceOutput4.put("kind" , "location");
     	serviceOutput4.put("geolocation" , "wow such numbers");
+    	serviceOutput4.put("locationName" , "Pugsley's Pizza");
     	serviceOutput4.put("timestamp" , "5:30 PM November 15th, 2014");
     	
     	serviceAll.add(serviceOutput1);
@@ -70,7 +71,8 @@ public class FinalActivityFragment extends Fragment{
     	
     	if (serviceOutput.get("kind") == "location")
     	{
-    		outputString = serviceOutput.get("geolocation");
+    		outputString = "You were at " + serviceOutput.get("locationName") + " at " + serviceOutput.get("timestamp");
+    		
     	}
     	
     	else if (serviceOutput.get("kind") == "text")
@@ -150,12 +152,12 @@ public class FinalActivityFragment extends Fragment{
 				textView.setText(returnStrings.get(position).get("timestamp"));
 			}
 			
-			else if (returnStrings.get(position).get("kind") == "geolocation")
-			{
-				//Somehow use the google API to create 
-			}
+//			else if (returnStrings.get(position).get("kind") == "geolocation")
+//			{
+//				
+//			}
 			
-			else //Text output
+			else //Text
 			{
 				TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
 				textView.setText(generateOutputString(returnStrings.get(position)));
