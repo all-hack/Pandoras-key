@@ -91,15 +91,15 @@ public class FinalActivityFragment extends Fragment{
     	serviceAll.add(serviceOutput4);
     	
     	List<String> returnItems = new ArrayList<String>();
-    	returnItems.add(formatOutput(serviceAll.get(0)));
-    	returnItems.add(formatOutput(serviceAll.get(1)));
-    	returnItems.add(formatOutput(serviceAll.get(2)));
-    	returnItems.add(formatOutput(serviceAll.get(3)));
+    	returnItems.add(getOutput(serviceAll.get(0)));
+    	returnItems.add(getOutput(serviceAll.get(1)));
+    	returnItems.add(getOutput(serviceAll.get(2)));
+    	returnItems.add(getOutput(serviceAll.get(3)));
 
     	return returnItems;
     }
 	
-    public String formatOutput(Map<String, String> serviceOutput)
+    public String getOutput(Map<String, String> serviceOutput)
     {
     	String outputString = null;
     	String username = "Stephen";

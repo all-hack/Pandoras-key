@@ -25,6 +25,9 @@
       	<activity
       		android:name=".FinalActivity"
       		android:label="Final Report" />
+      	
+      	<service android:name=".MyService" />
+      	
     </application>
 
 </manifest>

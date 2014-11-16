@@ -15,7 +15,8 @@
         android:layout_alignLeft="@+id/stop_button"
         android:layout_alignParentTop="true"
         android:layout_marginTop="89dp"
-        android:text="Start Service" />
+        android:text="Start Service" 
+        android:onClick="startService"/>
 
     <Button
         android:id="@+id/stop_button"
@@ -23,7 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Stop Service" />
+        android:text="Stop Service" 
+        android:onClick="stopService"/>
 
     <Button
         android:id="@+id/report_button"
