@@ -286,10 +286,10 @@ public class MyService extends Service {
 		}/* End of Class MyLocationListener */
     
     public void printTree(EventNode t) {
-    	Toast.makeText( getApplicationContext(),t.theEvent.get(0).toString(),Toast.LENGTH_SHORT).show();
+    	Toast.makeText( getApplicationContext(),t.theEvent.get(0).place,Toast.LENGTH_SHORT).show();
     	if(t.left != null) {
     		for(int i=0; i < t.left.theEvent.size(); i++) {
-    			Toast.makeText( getApplicationContext(),t.left.theEvent.get(i).toString(),Toast.LENGTH_SHORT).show();
+    			Toast.makeText( getApplicationContext(),t.left.theEvent.get(i).contactName,Toast.LENGTH_SHORT).show();
     		}
     	}
     	if(t.right != null) {
@@ -314,7 +314,7 @@ public class MyService extends Service {
 		}
 		
 		// prints the tree, location first then
-		printTree(theTree.root);
+		 // printTree(theTree.root);
 		
 		
 		

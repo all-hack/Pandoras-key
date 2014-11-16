@@ -4,12 +4,20 @@ public class Event {
 	
 	// All events have below fields
 	private long time;
-	private String place;
+	public String place;
 	private String type;
+	public String contactName;
 	
 	public Event(long inTime, String inPlace, String inType) {
 		time = inTime;
 		place = inPlace;
 		type = inType;
+	}
+	
+	public Event(long inTime, String inPlace, String inType, String inName) {
+		time = inTime;
+		place = inPlace;
+		type = inType;
+		contactName = inName;
 	}
 }
