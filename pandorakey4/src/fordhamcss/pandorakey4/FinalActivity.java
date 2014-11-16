@@ -1,16 +1,12 @@
 package fordhamcss.pandorakey4;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.Fragment;
 
-
-public class FinalActivity extends Activity {
-
+public class FinalActivity extends SingleFragmentActivity {
+	
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_final);
+    public Fragment createFragment() {
+        return new FinalActivityFragment();
     }
+    
 }
