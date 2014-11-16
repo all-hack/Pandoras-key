@@ -44,6 +44,11 @@ public class MainActivity extends Activity {
     	String[] array = new String[0];
     	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
     	
+//    	// PRINTS THE FIRST CONTACT
+//    	initialContactList.moveToFirst();
+//    	String Text = initialContactList.getString(initialContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//    	Toast.makeText( getApplicationContext(),Text,Toast.LENGTH_SHORT).show();
+    	
         report_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,39 +72,50 @@ public class MainActivity extends Activity {
     }
     
     // Checks contacts
-//    public void checkContacts(){
-//
-//    	LinkedList<String> theList = new LinkedList<String>();
-//
-//    	ContentResolver cr2 = getContentResolver();
-//    	Cursor newContactList = cr2.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-//
-//    	int diff = newContactList.getCount() - initialContactList.getCount();
-//
-//    	while(diff > 0) {
+    public void checkContacts() {
+
+    	Cursor newContactList;
+    	ContentResolver cr = getContentResolver();
+    	String[] array = new String[0];
+    	newContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
+
+    	int diff = newContactList.getCount() - initialContactList.getCount();
+
+		Toast.makeText( getApplicationContext(),"CHECK",Toast.LENGTH_SHORT).show();
+    	
+    	if(diff > 0) {
+        	// generates the time
+        	int time = (int) (System.currentTimeMillis());
+        	// find last contact added
+    		newContactList.moveToLast();
+    		String newContact = newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+    		// create a contact object
+    		createContact(newContact, time);
+    	}
+    		
+//    		if(initialContactList.getString(initialContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)).toString()
+//    				!= newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)).toString()) {
+//    			
+//    			String newString = newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)).toString();
+//    			Toast.makeText( getApplicationContext(),newString,Toast.LENGTH_SHORT).show();
+//    			
+//    			newContactList.moveToNext();
+//    			diff--;
+//    			String newText = theList.get(0);
+//    			Toast.makeText( getApplicationContext(),"WENT THRU",Toast.LENGTH_SHORT).show();
+//    		}
 //    		initialContactList.moveToNext();
 //    		newContactList.moveToNext();
-//
-//    		if(initialContactList.getString(initialContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-//    				!= newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))); {
-//    					theList.add(newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-//    					newContactList.moveToNext();
-//    					diff--;
-//    					String Text = theList.get(0);
-//    					Toast.makeText( getApplicationContext(),Text,Toast.LENGTH_SHORT).show();
-//    				}
 //    	}
-//    	// overwrites the initial contact list for next check
-//    	initialContactList = newContactList;
-//
-//    	// generates the time
-//    	int time = (int) (System.currentTimeMillis());
-//
+    	
+    	// overwrites the initial contact list for next check
+    	initialContactList = newContactList;
+
 //    	// calls function that creates contact objects
 //    	for(int i = 0; i < theList.size(); i++) {
 //    		createContact(theList.get(i), time);
 //    	}
-//    }
+    }
 
     // creates contact objects
     public void createContact(String inName, int inTime) {
