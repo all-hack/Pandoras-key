@@ -43,15 +43,13 @@ public class MainActivity extends Activity {
     	ContentResolver cr = getContentResolver();
     	String[] array = new String[0];
     	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
-
-        
+    	
         report_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             	System.out.println("Opening reports");
-                //Intent i = new Intent(MainActivity.this, FinalActivity.class); 
-                //startActivityForResult(i, 0);
-            	//checkContacts
+                // Intent i = new Intent(MainActivity.this, FinalActivity.class); 
+                // startActivityForResult(i, 0);
             	
             }
         });
