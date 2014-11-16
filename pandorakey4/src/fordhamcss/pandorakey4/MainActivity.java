@@ -13,18 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
 	
-	
-	
-	// Array used to store events as they are generated
-	LinkedList<Event> eventList = new LinkedList<Event>();
+	// creates a tree root to keep track
+	EventTree daTree = new EventTree();
 	
 	// initial contact list is saved
-	ContentResolver cr = getContentResolver();
-	Cursor initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+	Cursor initialContactList;
 	
 	MyService serviceBinder;
     Intent i;
@@ -42,12 +40,19 @@ public class MainActivity extends Activity {
         stop_button 	= (Button)findViewById(R.id.stop_button);
         report_button 	= (Button)findViewById(R.id.report_button);
         
+    	ContentResolver cr = getContentResolver();
+    	String[] array = new String[0];
+    	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
+
+        
         report_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             	System.out.println("Opening reports");
-                Intent i = new Intent(MainActivity.this, FinalActivity.class); 
-                startActivityForResult(i, 0);
+                //Intent i = new Intent(MainActivity.this, FinalActivity.class); 
+                //startActivityForResult(i, 0);
+            	//checkContacts
+            	
             }
         });
         
@@ -64,43 +69,45 @@ public class MainActivity extends Activity {
     }
     
     // Checks contacts
-	public void checkContacts(){
-		
-		LinkedList<String> theList = new LinkedList<String>();
-		
-		ContentResolver cr2 = getContentResolver();
-		Cursor newContactList = cr2.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-		
-		int diff = newContactList.getCount() - initialContactList.getCount();
-		
-		while(diff > 0) {
-			initialContactList.moveToNext();
-			newContactList.moveToNext();
+//    public void checkContacts(){
+//
+//    	LinkedList<String> theList = new LinkedList<String>();
+//
+//    	ContentResolver cr2 = getContentResolver();
+//    	Cursor newContactList = cr2.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+//
+//    	int diff = newContactList.getCount() - initialContactList.getCount();
+//
+//    	while(diff > 0) {
+//    		initialContactList.moveToNext();
+//    		newContactList.moveToNext();
+//
+//    		if(initialContactList.getString(initialContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+//    				!= newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))); {
+//    					theList.add(newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
+//    					newContactList.moveToNext();
+//    					diff--;
+//    					String Text = theList.get(0);
+//    					Toast.makeText( getApplicationContext(),Text,Toast.LENGTH_SHORT).show();
+//    				}
+//    	}
+//    	// overwrites the initial contact list for next check
+//    	initialContactList = newContactList;
+//
+//    	// generates the time
+//    	int time = (int) (System.currentTimeMillis());
+//
+//    	// calls function that creates contact objects
+//    	for(int i = 0; i < theList.size(); i++) {
+//    		createContact(theList.get(i), time);
+//    	}
+//    }
 
-			if(initialContactList.getString(initialContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-					!= newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))); {
-						theList.add(newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)));
-						newContactList.moveToNext();
-						diff--;
-					}
-		}
-		// overwrites the initial contact list for next check
-		initialContactList = newContactList;
-		
-		// generates the time
-		int time = (int) (System.currentTimeMillis());
-		
-		// calls function that creates contact objects
-		for(int i = 0; i < theList.size(); i++) {
-			createContact(theList.get(i), time);
-		}
-	}
-	
-	// creates contact objects
-	public void createContact(String inName, int inTime) {
-		ContactEvent newContact = new ContactEvent(inTime, "Some Location", inName);
-		eventList.add(newContact);
-	}
+    // creates contact objects
+    public void createContact(String inName, int inTime) {
+    	ContactEvent newContact = new ContactEvent(inTime, "Some Location", inName);
+    	daTree.insertEvent(newContact);
+    }
     
 
     @Override
