@@ -12,6 +12,9 @@ import android.widget.Button;
 
 public class MainActivity extends Activity {
 
+	MyService serviceBinder;
+    Intent i;
+	
 	private Button start_button;
 	private Button stop_button;
 	private Button report_button;
@@ -25,21 +28,21 @@ public class MainActivity extends Activity {
         stop_button 	= (Button)findViewById(R.id.stop_button);
         report_button 	= (Button)findViewById(R.id.report_button);
         
-        start_button.setOnClickListener(new View.OnClickListener() {
+   /*     start_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Start the service
             	System.out.println("Starting service");
             }
-        });
+        }); */
         
-        stop_button.setOnClickListener(new View.OnClickListener() {
+/*        stop_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Stop the service
             	System.out.println("Stopping service");
             }
-        });
+        }); */
         
         report_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +55,17 @@ public class MainActivity extends Activity {
         
     }
 
+    public void startService(View view) 
+    {    	
+        startService(  new Intent(getBaseContext(), MyService.class)   ); //works
+    //		startService(  new Intent(this, MyService.class)   ); //works
+    }
+    
+    public void stopService(View view) 
+    {
+        stopService(new Intent(getBaseContext(), MyService.class));
+    }
+    
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
