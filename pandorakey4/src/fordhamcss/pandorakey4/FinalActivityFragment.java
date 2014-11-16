@@ -1,6 +1,8 @@
 package fordhamcss.pandorakey4;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,22 @@ public class FinalActivityFragment extends Fragment{
 		setRetainInstance(true);
 		
         returnStrings = generateStrings();
+        sortStrings();
+        
         setupAdapter();
+    }
+    
+    public void sortStrings()
+    {    	
+        for (int i = 0; i < returnStrings.size() - 1; i++) {
+            int minPos = i;
+            for (int j = i + 1; j < returnStrings.size(); j++) {
+                if (Integer.parseInt(returnStrings.get(j).get("timestamp")) < Integer.parseInt(returnStrings.get(minPos).get("timestamp"))) {
+                    minPos = j;
+                }
+            }
+            Collections.swap(returnStrings, minPos, i);
+        }
     }
     
     public List<Map<String, String>> generateStrings()
@@ -35,26 +52,26 @@ public class FinalActivityFragment extends Fragment{
     	Map<String, String> serviceOutput1 = new HashMap<String, String>();
     	serviceOutput1.put("kind" , "contact");
     	serviceOutput1.put("name" , "Stephen Rubio");
-    	serviceOutput1.put("timestamp" , "5:30 PM November 15th, 2014");
+    	serviceOutput1.put("timestamp" , "2");
     	
     	Map<String, String> serviceOutput2 = new HashMap<String, String>();
     	serviceOutput2.put("kind" , "call");
     	serviceOutput2.put("from" , "Sam");
     	serviceOutput2.put("to" , "Sam");
     	serviceOutput2.put("missed" , "true");
-    	serviceOutput2.put("timestamp" , "5:30 PM November 15th, 2014");
+    	serviceOutput2.put("timestamp" , "5");
     	
     	Map<String, String> serviceOutput3 = new HashMap<String, String>();
     	serviceOutput3.put("kind" , "text");
     	serviceOutput3.put("from" , "Stephen");
     	serviceOutput3.put("to" , "Sam");
-    	serviceOutput3.put("timestamp" , "5:30 PM November 15th, 2014");
+    	serviceOutput3.put("timestamp" , "4");
     	
     	Map<String, String> serviceOutput4 = new HashMap<String, String>();
     	serviceOutput4.put("kind" , "location");
     	serviceOutput4.put("geolocation" , "wow such numbers");
     	serviceOutput4.put("locationName" , "Pugsley's Pizza");
-    	serviceOutput4.put("timestamp" , "5:30 PM November 15th, 2014");
+    	serviceOutput4.put("timestamp" , "1");
     	
     	serviceAll.add(serviceOutput1);
     	serviceAll.add(serviceOutput2);
@@ -151,11 +168,6 @@ public class FinalActivityFragment extends Fragment{
 				TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
 				textView.setText(returnStrings.get(position).get("timestamp"));
 			}
-			
-//			else if (returnStrings.get(position).get("kind") == "geolocation")
-//			{
-//				
-//			}
 			
 			else //Text
 			{
