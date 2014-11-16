@@ -43,7 +43,8 @@ public class MyService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// We want this service to continue running until it is explicitly  stopped, so return sticky.
 		
-		
+		Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+
 		/* Use the LocationManager class to obtain GPS locations */
 		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		LocationListener mlocListener = new MyLocationListener();
@@ -51,8 +52,7 @@ public class MyService extends Service {
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
 				 1000, 0, mlocListener);
 		
-		Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-
+/*
 		for (int i=0; i<urls.length; i++) {
 			try {
 				urls[i] = new URL("http://www.amazon.com/") ;
@@ -60,13 +60,14 @@ public class MyService extends Service {
 				e.printStackTrace();
 			}
 		}
-		 
-		new DoBackgroundTask().execute(urls);		// Run a job in a separate thread specified by an AsyncTask. 
+		 */
+	//	new DoBackgroundTask().execute(urls);		// Run a job in a separate thread specified by an AsyncTask. 
 	//	doSomethingRepeatedly();		
 		
 		return START_STICKY;
 	}
     
+	/*
     private void doSomethingRepeatedly() {
         timer.scheduleAtFixedRate( new TimerTask() {
             public void run() {
@@ -77,8 +78,9 @@ public class MyService extends Service {
         //In fixed-rate execution, each execution is scheduled relative to the scheduled execution time of the initial execution. 
         //If an execution is delayed for any reason (such as garbage collection or other background activity), 
         //two or more executions will occur in rapid succession to "catch up."
-    }
+    }*/
 	
+	/*
     private int DownloadFile(URL url) {
         try {
             //---simulate taking some time to download a file---
@@ -89,8 +91,9 @@ public class MyService extends Service {
         //---return an arbitrary number representing 
         // the size of the file downloaded---
         return 100;
-    }
+    }*/
 
+    /*
     private class DoBackgroundTask extends AsyncTask<URL, Integer, Long> {
     	
         protected Long doInBackground(URL... urls) {
@@ -103,16 +106,17 @@ public class MyService extends Service {
                 publishProgress((int) (((i+1) / (float) count) * 100));
             }
             return totalBytesDownloaded;
-        }
+        }*/
 
+        /*
         protected void onProgressUpdate(Integer... progress) {
             Log.d("MyService",  String.valueOf(progress[0]) + "% downloaded");
             
             //Toast.makeText(getBaseContext(),   String.valueOf(progress[0]) + "% downloaded", Toast.LENGTH_LONG).show();
             Toast.makeText(MyService.this,   String.valueOf(progress[0]) + "% downloaded", Toast.LENGTH_LONG).show();
            
-        }
-
+        }*/
+/*
         protected void onPostExecute(Long result) {
         	
             //Toast.makeText(getBaseContext(),  "Downloaded " + result + " bytes", Toast.LENGTH_LONG).show(); //works
@@ -123,7 +127,7 @@ public class MyService extends Service {
             
             stopSelf();  // a method of the surrounding service instance. 
         }
-    }    
+    }    /*
   
 	/*
 		The onDestroy() method is called when the service is stopped using the stopService() method. 
@@ -131,7 +135,7 @@ public class MyService extends Service {
 	 */
     
     
-public class MyLocationListener implements LocationListener {
+    public class MyLocationListener implements LocationListener {
 		
 		@Override
 		public void onLocationChanged(Location loc) {
