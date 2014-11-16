@@ -9,7 +9,7 @@ public class EventTree {
 		root = null;
 	}
 	
-    private void insertLocation(Event x) {
+    void insertLocation(Event x) {
         root = insertLocation(x, root);
     }
 	

@@ -1,11 +1,15 @@
 package fordhamcss.pandorakey4;
 
+
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -13,6 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,10 +27,31 @@ public class MyService extends Service {
         
 //    static final int UPDATE_INTERVAL = 1000;
 //    private Timer timer = new Timer();
+	
+	// initial contact list is saved
+	Cursor initialContactList;
 
 	
 	String CurrentLocation = "Null";
+	LinkedList<String> CurrLocation = new LinkedList<String>();
+	LinkedList<String> CurrContact = new LinkedList<String>();
 	
+	EventTree theTree = new EventTree();
+	
+	
+	/*
+	daTree = new EventTree();
+
+	daTree.insertLocation(new PlaceEvent(5, "location", "Pugsley's Pizza"));
+	daTree.insertEvent(new ContactEvent(6, "location", "First Contact"));
+	daTree.insertEvent(new ContactEvent(7, "location", "Second Contact"));
+
+	daTree.insertLocation(new PlaceEvent(8, "Another Location", "Full Moon Pizza"));
+	daTree.insertEvent(new ContactEvent(9, "Another Location", "Third Contact"));
+	daTree.insertEvent(new ContactEvent(10, "Another Location", "Fourth Contact"));
+	*/
+	//System.out.println(daTree.root.theEvent);
+	//System.out.println(daTree.root.theEvent);
 	
 	
 	/* An abstract method we must implement. 
@@ -47,6 +73,10 @@ public class MyService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// We want this service to continue running until it is explicitly  stopped, so return sticky.
 		
+    	ContentResolver cr = getContentResolver();
+    	String[] array = new String[0];
+    	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
+		
 		Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 
 		/* Use the LocationManager class to obtain GPS locations */
@@ -54,7 +84,7 @@ public class MyService extends Service {
 		LocationListener mlocListener = new MyLocationListener();
 		// below updates on time interval (mill seconds) AND location (meters)
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-				 100, 0, mlocListener);
+				5 * 1000, 0, mlocListener);
 		
 /*
 		for (int i=0; i<urls.length; i++) {
@@ -160,6 +190,32 @@ public class MyService extends Service {
         }
         return strAdd;
     }
+	
+	// Checks contacts
+    public void checkContacts(){
+    	
+    	Cursor newContactList;
+    	ContentResolver cr = getContentResolver();
+    	String[] array = new String[0];
+    	newContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
+
+    	int diff = newContactList.getCount() - initialContactList.getCount();
+
+    	if(diff > 0) {
+    		int time = (int) (System.currentTimeMillis());
+
+    		newContactList.moveToLast();
+
+    		String newContact = newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+    		ContactEvent newContactEntry = new ContactEvent(time, CurrentLocation, newContact);
+    		
+    		theTree.insertEvent(newContactEntry);
+    		
+    		CurrContact.add(newContact);
+    	}
+    }
+
     
     public class MyLocationListener implements LocationListener {
 		
@@ -174,16 +230,27 @@ public class MyService extends Service {
 		
 		String Text = getCompleteAddressString(lat, lon);
 		
-		if (CurrentLocation == "Null")		
-			{
-				CurrentLocation = Text;		
-				Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
-			}	
-		else
+		if (CurrentLocation == "Null") {
+			CurrentLocation = Text;
+			Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
+			CurrLocation.add(CurrentLocation);
+
+			int time = (int)(System.currentTimeMillis());
+			PlaceEvent newPlace = new PlaceEvent(time, CurrentLocation);
+			theTree.insertLocation(newPlace);
+		}
+
+		checkContacts();
+
 		if(CurrentLocation != Text )
 		{
 			CurrentLocation = Text;		
-			Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
+			//	Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
+			CurrLocation.add(CurrentLocation);
+
+			int time = (int)(System.currentTimeMillis());
+			PlaceEvent newPlace = new PlaceEvent(time, CurrentLocation);
+			theTree.insertLocation(newPlace);
 		}
 	
 		/*else if(CurrentLocation == Text)
@@ -215,10 +282,37 @@ public class MyService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		
+		for(int i=0; i < CurrLocation.size(); i++) {
+			Toast.makeText( getApplicationContext(),
+					CurrLocation.get(i),
+					Toast.LENGTH_SHORT).show();
+		}
+		
+		for(int i=0; i < CurrContact.size(); i++) {
+			Toast.makeText( getApplicationContext(),
+					CurrContact.get(i),
+					Toast.LENGTH_SHORT).show();
+		}
+		
+								
         //if (timer != null){
         //    timer.cancel();
-        //}
-        
-		Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
+        //}        
+		/*
+		Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();		
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(buffer);
+		oos.writeObject(obj);
+		oos.close();
+		byte[] rawData = buffer.toByteArray();
+		FileOutputStream outputStream;
+		outputStream = openFileOutput("File", Context.MODE_PRIVATE);
+		outputStream.write(rawData);
+		outputStream.close();
+		*/
+		
+		
+		
+		
 	}
 }
