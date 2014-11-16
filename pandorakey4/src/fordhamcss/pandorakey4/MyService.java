@@ -24,7 +24,7 @@ public class MyService extends Service {
 //    private Timer timer = new Timer();
 
 	
-	String CurrentLocation = "No Value";
+	String CurrentLocation = "Null";
 	
 	
 	
@@ -54,7 +54,7 @@ public class MyService extends Service {
 		LocationListener mlocListener = new MyLocationListener();
 		// below updates on time interval (mill seconds) AND location (meters)
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-				 1000, 10, mlocListener);
+				 100, 0, mlocListener);
 		
 /*
 		for (int i=0; i<urls.length; i++) {
@@ -171,10 +171,25 @@ public class MyService extends Service {
 		//String Text = "My current location is: " + "Latitud = "
 		//+ loc.getLatitude() + "Longitud = " + loc.getLongitude();
 		
+		
 		String Text = getCompleteAddressString(lat, lon);
 		
-		
-		Toast.makeText( getApplicationContext(),Text, Toast.LENGTH_SHORT).show();
+		if (CurrentLocation == "Null")		
+			{
+				CurrentLocation = Text;		
+				Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
+			}	
+		else
+		if(CurrentLocation != Text )
+		{
+			CurrentLocation = Text;		
+			Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
+		}
+	
+		/*else if(CurrentLocation == Text)
+		{
+			Toast.makeText(getApplicationContext(), "you are in the same place", Toast.LENGTH_SHORT).show();
+		}*/
 		
 		}
 		@Override
