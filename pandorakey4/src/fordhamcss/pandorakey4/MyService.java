@@ -326,7 +326,7 @@ public class MyService extends Service {
 		Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();		
 		
 		
-		/*ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	/*	ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 		ObjectOutputStream oos;
 		try {
 			oos = new ObjectOutputStream(buffer);
@@ -356,8 +356,8 @@ public class MyService extends Service {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
-		
+		}
+		*/
 		
 		
 		
