@@ -20,4 +20,17 @@ public class Event {
 		type = inType;
 		contactName = inName;
 	}
+	
+	public long getTime() {
+		return time;
+	}
+	
+	public String getPlace() {
+		return place;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
 }
