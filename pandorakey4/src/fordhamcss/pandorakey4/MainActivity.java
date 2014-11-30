@@ -49,9 +49,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
             	System.out.println("Opening reports");
-                // Intent i = new Intent(MainActivity.this, FinalActivity.class); 
-                // startActivityForResult(i, 0);
-            	
+                 Intent i = new Intent(MainActivity.this, FinalActivity.class); 
+                 startActivityForResult(i, 0);
             }
         });
         

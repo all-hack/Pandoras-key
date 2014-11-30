@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import android.support.v4.app.Fragment;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,36 +18,26 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FinalActivityFragment extends Fragment{
 	List<Map<String, String>> returnStrings;
 	ListView mListView;
-	
+		
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 		
-        returnStrings = generateStrings();
-        sortStrings();
+		returnStrings = new ArrayList<Map<String, String>>();
+		
+		EventTree tree = genDummyTree();
+		getOutput(tree.root);
         
         setupAdapter();
     }
-    
-    public void sortStrings()
-    {    	
-        for (int i = 0; i < returnStrings.size() - 1; i++) {
-            int minPos = i;
-            for (int j = i + 1; j < returnStrings.size(); j++) {
-                if (Integer.parseInt(returnStrings.get(j).get("timestamp")) < Integer.parseInt(returnStrings.get(minPos).get("timestamp"))) {
-                    minPos = j;
-                }
-            }
-            Collections.swap(returnStrings, minPos, i);
-        }
-    }
-    
-    public List<Map<String, String>> generateStrings()
+
+    public List<Map<String, String>> genDummyStrings()
     {
     	List<Map<String, String>> serviceAll = new ArrayList<Map<String, String>>();
 		
@@ -80,7 +72,44 @@ public class FinalActivityFragment extends Fragment{
 
     	return serviceAll;
     }
-	
+
+    public void getOutput(EventNode t)
+    {
+    	Map<String, String> locOutput = new HashMap<String, String>();
+    	locOutput.put("kind" , "location");
+    	locOutput.put("locationName" ,  t.theEvent.get(0).place);
+    	locOutput.put("timestamp" , "1");
+    	returnStrings.add(locOutput);
+    	
+	    if(t.left != null) {
+			for(int i=0; i < t.left.theEvent.size(); i++) {
+		    	Map<String, String> tempServiceOutput = new HashMap<String, String>();
+		    	tempServiceOutput.put("kind" , "contact");
+		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).contactName);
+		    	tempServiceOutput.put("timestamp" , "2");
+		    	returnStrings.add(tempServiceOutput);
+			}
+		}
+		if(t.right != null) {
+			getOutput(t.right);
+		}
+    }
+    
+    public EventTree genDummyTree()
+    {
+    	EventTree daTree = new EventTree();
+    	
+    	daTree.insertLocation(new PlaceEvent(5, "Pugsley's Pizza"));
+    	daTree.insertEvent(new ContactEvent(6, "location", "First Contact"));
+    	daTree.insertEvent(new ContactEvent(7, "location", "Second Contact"));
+
+    	daTree.insertLocation(new PlaceEvent(8, "Full Moon Pizza"));
+    	daTree.insertEvent(new ContactEvent(9, "Another Location", "Third Contact"));
+    	daTree.insertEvent(new ContactEvent(10, "Another Location", "Fourth Contact"));
+    	
+    	return daTree;
+    }
+    
     public String generateOutputString(Map<String, String> serviceOutput)
     {
     	String outputString = null;
