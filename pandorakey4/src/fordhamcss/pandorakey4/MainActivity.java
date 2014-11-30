@@ -1,5 +1,6 @@
-//Test change
 package fordhamcss.pandorakey4;
+
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,13 +21,11 @@ public class MainActivity extends Activity {
 
     public void openReport(View view)
     {
-        Intent i = new Intent(MainActivity.this, FinalActivity.class); 
-        startActivityForResult(i, 0);
-    }
-    
-    public void openReport(View view, EventTree tree)
-    {
-        startActivityForResult(new Intent(MainActivity.this, FinalActivity.class), 0);
+    	ArrayList<String> outputStrings = new ArrayList<String>(); //Replace with code to pull saved report
+    	
+		Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
+		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  		
+        startActivityForResult(dialogIntent, 0);
     }
     
     public void startService(View view) 

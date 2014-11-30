@@ -373,7 +373,7 @@ public class MyService extends Service {
     	
 		getOutput(dummyTree.root);
 		
-		//For production, uses actual gathered data
+		//For production, uses actual recorded data
 //		getOutput(theTree.root);
 		
 		ArrayList<String> outputStrings = new ArrayList<String>();
