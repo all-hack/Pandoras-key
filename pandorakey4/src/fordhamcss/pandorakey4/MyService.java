@@ -6,9 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import android.app.Service;
 import android.content.ContentResolver;
@@ -35,14 +38,14 @@ public class MyService extends Service {
 	
 	// initial contact list is saved
 	Cursor initialContactList;
-
 	
 	String CurrentLocation = "Null";
 	LinkedList<String> CurrLocation = new LinkedList<String>();
 	LinkedList<String> CurrContact = new LinkedList<String>();
 	
 	EventTree theTree = new EventTree();
-	
+	List<Map<String, String>> returnStrings = new ArrayList<Map<String, String>>();
+
 	
 	/*
 	daTree = new EventTree();
@@ -283,47 +286,107 @@ public class MyService extends Service {
 		@Override
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 		}
-		}/* End of Class MyLocationListener */
+		}/* End of Class MyLocationListener */    
     
-    public void printTree(EventNode t) {
-    	Toast.makeText( getApplicationContext(),t.theEvent.get(0).place,Toast.LENGTH_SHORT).show();
-    	if(t.left != null) {
-    		for(int i=0; i < t.left.theEvent.size(); i++) {
-    			Toast.makeText( getApplicationContext(),t.left.theEvent.get(i).contactName,Toast.LENGTH_SHORT).show();
-    		}
-    	}
-    	if(t.right != null) {
-    		printTree(t.right);
-    	}
+    public void getOutput(EventNode t)
+    {
+    	Map<String, String> locOutput = new HashMap<String, String>();
+    	locOutput.put("kind" , "location");
+    	locOutput.put("locationName" ,  t.theEvent.get(0).place);
+    	locOutput.put("timestamp" , "1");
+    	returnStrings.add(locOutput);
+    	
+	    if(t.left != null) {
+			for(int i=0; i < t.left.theEvent.size(); i++) {
+		    	Map<String, String> tempServiceOutput = new HashMap<String, String>();
+		    	tempServiceOutput.put("kind" , "contact");
+		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).contactName);
+		    	tempServiceOutput.put("timestamp" , "2");
+		    	returnStrings.add(tempServiceOutput);
+			}
+		}
+		if(t.right != null) {
+			getOutput(t.right);
+		}
     }
     
-	@Override
+    public String generateOutputString(Map<String, String> serviceOutput)
+    {
+    	String outputString = null;
+    	String username = "Stephen";
+    	
+    	if (serviceOutput.get("kind") == "location")
+    	{
+    		outputString = "You were at " + serviceOutput.get("locationName") + " at " + serviceOutput.get("timestamp");
+    		
+    	}
+    	
+    	else if (serviceOutput.get("kind") == "text")
+    	{
+    		outputString = "Text message ";
+    		if (username.equals(serviceOutput.get("from")))
+    			outputString += "sent to ";
+    		else
+    			outputString += "from ";
+    		outputString += serviceOutput.get("to") + " at " + serviceOutput.get("timestamp");
+    	}
+    	
+    	else if (serviceOutput.get("kind") == "call")
+    	{
+    		if (serviceOutput.get("missed").equals("true"))
+    			outputString = "Missed call ";
+    		else
+    			outputString = "Call ";
+    		
+    		if (username.equals(serviceOutput.get("from")))
+    			outputString += "to ";
+    		else
+    			outputString += "from ";
+    		outputString += serviceOutput.get("to") + " at " + serviceOutput.get("timestamp");
+    	}
+    	
+    	else if (serviceOutput.get("kind") == "contact")
+    	{
+    		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
+    	}
+    	
+    	else if (serviceOutput.get("kind") == "photo") //Not Working
+    	{
+    		
+    	}
+    			
+		return outputString;
+    }
+    
+    @Override
 	public void onDestroy() {
 		super.onDestroy();
 		
-		/*for(int i=0; i < CurrLocation.size(); i++) {
-			Toast.makeText( getApplicationContext(),
-					CurrLocation.get(i),
-					Toast.LENGTH_SHORT).show();
-		}
+		//For development, uses dummy tree
+		EventTree dummyTree = new EventTree();
+		dummyTree.insertLocation(new PlaceEvent(5, "Pugsley's Pizza"));
+		dummyTree.insertEvent(new ContactEvent(6, "location", "Person McPersonface"));
+		dummyTree.insertEvent(new ContactEvent(7, "location", "Fatso McPersonface"));
+		dummyTree.insertLocation(new PlaceEvent(8, "Full Moon Pizza"));
+		dummyTree.insertEvent(new ContactEvent(9, "Another Location", "Person McNotPersonFace"));
+		dummyTree.insertEvent(new ContactEvent(10, "Another Location", "Fatso McNotPersonFace"));
+    	
+		getOutput(dummyTree.root);
 		
-		for(int i=0; i < CurrContact.size(); i++) {
-			Toast.makeText( getApplicationContext(),
-					CurrContact.get(i),
-					Toast.LENGTH_SHORT).show();
-		}*/
+		//For production, uses actual gathered data
+//		getOutput(theTree.root);
 		
-		// prints the tree, location first then
-		  printTree(theTree.root);
+		ArrayList<String> outputStrings = new ArrayList<String>();
 		
+		for (int x=0; x<returnStrings.size(); x++)
+			outputStrings.add(generateOutputString(returnStrings.get(x)));
 		
+		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
+		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
+		getApplication().startActivity(dialogIntent);		
 		
-								
-        //if (timer != null){
-        //    timer.cancel();
-        //}        
-		
-		Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();		
+		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
 		
 		
 	/*	ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -358,10 +421,6 @@ public class MyService extends Service {
 			e.printStackTrace();
 		}
 		*/
-		
-		
-		
-		
 		
 	}
 }

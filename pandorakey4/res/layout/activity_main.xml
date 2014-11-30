@@ -36,6 +36,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="31dp"
         android:layout_marginRight="25dp"
-        android:text="View Reports" />
+        android:text="View Reports"
+        android:onClick="openReport" />
 
 </RelativeLayout>
