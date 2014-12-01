@@ -349,11 +349,6 @@ public class MyService extends Service {
     	{
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
-    	
-    	else if (serviceOutput.get("kind") == "photo") //Not Working
-    	{
-    		
-    	}
     			
 		return outputString;
     }
@@ -365,11 +360,11 @@ public class MyService extends Service {
 		//For development, uses dummy tree
 		EventTree dummyTree = new EventTree();
 		dummyTree.insertLocation(new PlaceEvent(5, "Pugsley's Pizza"));
-		dummyTree.insertEvent(new ContactEvent(6, "location", "Person McPersonface"));
-		dummyTree.insertEvent(new ContactEvent(7, "location", "Fatso McPersonface"));
+		dummyTree.insertEvent(new ContactEvent(6, "Person McPersonface"));
+		dummyTree.insertEvent(new ContactEvent(7, "Fatso McPersonface"));
 		dummyTree.insertLocation(new PlaceEvent(8, "Full Moon Pizza"));
-		dummyTree.insertEvent(new ContactEvent(9, "Another Location", "Person McNotPersonFace"));
-		dummyTree.insertEvent(new ContactEvent(10, "Another Location", "Fatso McNotPersonFace"));
+		dummyTree.insertEvent(new ContactEvent(9, "Person McNotPersonFace"));
+		dummyTree.insertEvent(new ContactEvent(10, "Fatso McNotPersonFace"));
     	
 		getOutput(dummyTree.root);
 		
