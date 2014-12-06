@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Button;
 
 public class FinalActivityFragment extends Fragment{
 	ArrayList<String> outputStrings;
@@ -33,7 +34,9 @@ public class FinalActivityFragment extends Fragment{
 	{
 		View v = inflater.inflate(R.layout.activity_final, container, false);
 		mListView = (ListView) v.findViewById(R.id.listView);
-		setupAdapter(); 
+        mListView.addHeaderView(inflater.inflate(R.layout.button_layout, null));
+
+        setupAdapter();
 
 		return v;
 	}
@@ -41,8 +44,8 @@ public class FinalActivityFragment extends Fragment{
 	void setupAdapter() 
 	{	
 		if (getActivity() == null || mListView == null)
-			return;
-		
+            return;
+
 		if (outputStrings != null)
 			mListView.setAdapter(new ItemAdapter(outputStrings));
 		else
@@ -58,8 +61,9 @@ public class FinalActivityFragment extends Fragment{
 		}
 		
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {		
-			if (convertView == null) 
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			if (convertView == null)
 				convertView = getActivity().getLayoutInflater().inflate(R.layout.item_layout, parent, false);
 
 			TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
