@@ -10,39 +10,38 @@
     tools:context="fordhamcss.pandorakey4.MainActivity" >
 
     <Button
-        android:id="@+id/stop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/report_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp"
-        android:onClick="stopService"
-        android:text="End" 
-        style="?android:attr/borderlessButtonStyle" />
-
-    <Button
-        android:id="@+id/start_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/stop_button"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="86dp"
-        android:onClick="startService"
-        android:color="#FFFFFF"
-        android:text="Begin" 
-        style="?android:attr/borderlessButtonStyle"
-        />
-
-    <Button
         android:id="@+id/report_button"
-        style="?android:attr/buttonStyleSmall"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="24dp"
         android:onClick="openReport"
-        android:text="Show Last Report" />
+        android:text="Show Last Report"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/stop_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/report_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="88dp"
+        android:onClick="stopService"
+        android:text="End"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/start_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/stop_button"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="35dp"
+        android:onClick="startService"
+        android:text="Begin"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>
