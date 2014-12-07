@@ -21,27 +21,27 @@
         android:textColor="#ffffff" />
 
     <Button
-        android:id="@+id/stop_button"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/report_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="88dp"
-        android:onClick="stopService"
-        android:text="End"
-        android:textColor="#ffffff" />
-
-    <Button
         android:id="@+id/start_button"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/stop_button"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="35dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
         android:onClick="startService"
         android:text="Begin"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/stop_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignRight="@+id/report_button"
+        android:layout_below="@+id/start_button"
+        android:layout_centerHorizontal="true"
+        android:onClick="stopService"
+        android:text="End"
         android:textColor="#ffffff" />
 
 </RelativeLayout>
