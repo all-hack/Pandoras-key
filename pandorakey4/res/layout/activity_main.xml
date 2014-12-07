@@ -17,7 +17,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:onClick="openReport"
-        android:text="Show Last Report"
+        android:text="@string/last_report"
         android:textColor="#ffffff" />
 
     <Button
@@ -29,7 +29,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp"
         android:onClick="startService"
-        android:text="Begin"
+        android:text="@string/start_service"
         android:textColor="#ffffff" />
 
     <Button
@@ -41,7 +41,7 @@
         android:layout_below="@+id/start_button"
         android:layout_centerHorizontal="true"
         android:onClick="stopService"
-        android:text="End"
+        android:text="@string/stop_service"
         android:textColor="#ffffff" />
 
 </RelativeLayout>
