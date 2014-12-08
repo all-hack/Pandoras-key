@@ -21,6 +21,11 @@ public class Event {
 		contactName = inName;
 	}
 	
+	public String getContactName()
+	{
+		return contactName;
+	}
+	
 	public long getTime() {
 		return time;
 	}

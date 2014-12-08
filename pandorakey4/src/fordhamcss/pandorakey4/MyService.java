@@ -1,11 +1,5 @@
 package fordhamcss.pandorakey4;
 
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,6 +11,8 @@ import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
@@ -28,6 +24,8 @@ import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 public class MyService extends Service {
 //    int counter = 0;
@@ -293,21 +291,63 @@ public class MyService extends Service {
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
     	locOutput.put("locationName" ,  t.theEvent.get(0).place);
-    	locOutput.put("timestamp" , "1");
+    	locOutput.put("timestamp" , convertToString(t.theEvent.get(0).getTime()));
     	returnStrings.add(locOutput);
     	
 	    if(t.left != null) {
 			for(int i=0; i < t.left.theEvent.size(); i++) {
 		    	Map<String, String> tempServiceOutput = new HashMap<String, String>();
 		    	tempServiceOutput.put("kind" , "contact");
-		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).contactName);
-		    	tempServiceOutput.put("timestamp" , "2");
+		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).getContactName());
+		    	tempServiceOutput.put("timestamp" , convertToString(t.left.theEvent.get(i).getTime()));
 		    	returnStrings.add(tempServiceOutput);
 			}
 		}
 		if(t.right != null) {
 			getOutput(t.right);
 		}
+    }
+    
+    public String convertToString(long t)
+    {
+    	if (t == 1)
+    		return "1";
+    	else
+    	if (t == 2)
+    		return "2";
+    	else
+		if (t == 3)
+    		return "3";
+    	else
+    	if (t == 4)
+    		return "4";
+    	else    		
+    	if (t == 5)
+    		return "5";
+    	else
+    	if (t == 6)
+    		return "6";
+    	else
+		if (t == 7)
+     		return "7";
+    	else
+    	if (t == 8)
+    		return "8";
+    	else    		
+    	if (t == 9)
+    		return "9";
+    	else
+    	if (t == 10)
+    		return "10";
+    	else
+		if (t == 11)
+    		return "11";
+    	else
+    	if (t == 12)
+    		return "12";
+    	else 
+    		return null;
+    	
     }
     
     public String generateOutputString(Map<String, String> serviceOutput)
@@ -349,7 +389,10 @@ public class MyService extends Service {
     	{
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
-    			
+    	
+		Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();		
+
+    	
 		return outputString;
     }
     
@@ -359,14 +402,17 @@ public class MyService extends Service {
 		
 		//For development, uses dummy tree
 		EventTree dummyTree = new EventTree();
-		dummyTree.insertLocation(new PlaceEvent(5, "Pugsley's Pizza"));
-		dummyTree.insertEvent(new ContactEvent(6, "Person McPersonface"));
-		dummyTree.insertEvent(new ContactEvent(7, "Fatso McPersonface"));
-		dummyTree.insertLocation(new PlaceEvent(8, "Full Moon Pizza"));
-		dummyTree.insertEvent(new ContactEvent(9, "Person McNotPersonFace"));
-		dummyTree.insertEvent(new ContactEvent(10, "Fatso McNotPersonFace"));
+		dummyTree.insertLocation(new Event(5, "Pugsley's Pizza", "Place"));
+		dummyTree.insertEvent(new Event(6, "Pugsley's Pizza ","Contact", "Person McPersonface"));
+		dummyTree.insertEvent(new Event(7,"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
+		dummyTree.insertLocation(new Event(8, "Full Moon Pizza", "Place"));
+		dummyTree.insertEvent(new Event(9,"Full Moon Pizza","Place", "Person McNotPersonFace"));
+		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
     	
 		getOutput(dummyTree.root);
+		
+
+		
 		
 		//For production, uses actual recorded data
 //		getOutput(theTree.root);
@@ -376,10 +422,10 @@ public class MyService extends Service {
 		for (int x=0; x<returnStrings.size(); x++)
 			outputStrings.add(generateOutputString(returnStrings.get(x)));
 		
-		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
-		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
-		getApplication().startActivity(dialogIntent);		
+//		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
+//		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
+//		getApplication().startActivity(dialogIntent);		
 		
 		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
 		
@@ -415,7 +461,63 @@ public class MyService extends Service {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
-		
+		*/	
 	}
+    
+    public void Store(Context context, EventTree tree, String prefName, String key)
+    {
+    	
+    	SharedPreferences settings;
+    	Editor editor;
+    	
+    	//get context for edit 
+    	settings = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+    	editor = settings.edit();
+    	
+    	//serialize object 
+    	Gson gson = new Gson();
+    	String jsonTree = gson.toJson(tree);
+    	
+    	//set into editor and push key 
+    	editor.putString(key, jsonTree);
+    	editor.apply();    	    	    	    	    	    	
+    }
+    
+    public EventTree getEventTree (Context context, String prefName, String key)
+    {
+    	SharedPreferences settings;
+    	
+    	EventTree tree = new EventTree();
+    	
+    	//get context 
+    	settings = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+    	
+    	//key exist 
+    	if (settings.contains(key))
+    	{
+    		//deserialize 
+    		String jsonTree = settings.getString(key, null);
+    		Gson gson = new Gson();
+    		
+    		tree = gson.fromJson(jsonTree, EventTree.class);    		
+    	}
+    	else 
+    	{
+    		return null;
+    	}
+    	
+    	return (EventTree) tree;
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
