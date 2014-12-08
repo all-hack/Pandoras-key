@@ -409,18 +409,29 @@ public class MyService extends Service {
 		dummyTree.insertEvent(new Event(9,"Full Moon Pizza","Place", "Person McNotPersonFace"));
 		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
     	
-		getOutput(dummyTree.root);
+//		getOutput(dummyTree.root);
+		EventTree loaded = new EventTree();
+		String save1 = "save1";
+		String open = "open";
 		
-
+		Store(this, dummyTree, save1, open);
+		loaded = Load(this, save1, open );
+		
+		loaded.insertLocation(new Event(5, "Da Club", "Place"));
+		loaded.insertEvent(new Event(6, "Da Club","Contact", "Yo MAma"));
+		loaded.insertEvent(new Event(7,"Da Club","Contact", "HolyShit ItWerks"));
 		
 		
 		//For production, uses actual recorded data
 //		getOutput(theTree.root);
-		
-		ArrayList<String> outputStrings = new ArrayList<String>();
-		
+		getOutput(loaded.root);
+		ArrayList<String> outputStrings = new ArrayList<String>();		
 		for (int x=0; x<returnStrings.size(); x++)
 			outputStrings.add(generateOutputString(returnStrings.get(x)));
+		
+		
+		
+		
 		
 //		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
 //		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -483,7 +494,7 @@ public class MyService extends Service {
     	editor.apply();    	    	    	    	    	    	
     }
     
-    public EventTree getEventTree (Context context, String prefName, String key)
+    public EventTree Load (Context context, String prefName, String key)
     {
     	SharedPreferences settings;
     	
