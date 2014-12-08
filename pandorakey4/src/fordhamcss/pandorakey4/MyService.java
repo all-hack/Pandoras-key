@@ -214,7 +214,7 @@ public class MyService extends Service {
 
     		String newContact = newContactList.getString(newContactList.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-    		ContactEvent newContactEntry = new ContactEvent(time, CurrentLocation, newContact);
+    		Event newContactEntry = new Event(time, CurrentLocation, "Contact", newContact);
     		
     		theTree.insertEvent(newContactEntry);
     		
@@ -244,7 +244,7 @@ public class MyService extends Service {
 			CurrLocation.add(CurrentLocation);
 
 			int time = (int)(System.currentTimeMillis());
-			PlaceEvent newPlace = new PlaceEvent(time, CurrentLocation);
+			Event newPlace = new Event(time, CurrentLocation, "Place");
 			theTree.insertLocation(newPlace);
 		}
 
@@ -257,7 +257,7 @@ public class MyService extends Service {
 			CurrLocation.add(CurrentLocation);
 
 			int time = (int)(System.currentTimeMillis());
-			PlaceEvent newPlace = new PlaceEvent(time, CurrentLocation);
+			Event newPlace = new Event(time, CurrentLocation, "Place");
 			theTree.insertLocation(newPlace);
 		}
 	
