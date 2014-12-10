@@ -10,37 +10,38 @@
     tools:context="fordhamcss.pandorakey4.MainActivity" >
 
     <Button
-        android:id="@+id/report_button"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="openReport"
-        android:text="@string/last_report"
-        android:textColor="#ffffff"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/start_button"
-        android:layout_marginBottom="157dp" />
-
-    <Button
         android:id="@+id/start_button"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="45dp"
+        android:layout_toLeftOf="@+id/stop_button"
         android:onClick="startService"
         android:text="@string/start_service"
-        android:textColor="#ffffff"
-        />
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/report_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/start_button"
+        android:layout_alignParentBottom="true"
+        android:onClick="openReport"
+        android:text="@string/last_report"
+        android:textColor="#ffffff" />
 
     <Button
         android:id="@+id/stop_button"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/report_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="43dp"
         android:onClick="stopService"
         android:text="@string/stop_service"
-        android:textColor="#ffffff"
-        android:layout_marginTop="31dp"
-        android:layout_below="@+id/report_button"
-        android:layout_centerHorizontal="true" />
+        android:textColor="#ffffff" />
 
 </RelativeLayout>
