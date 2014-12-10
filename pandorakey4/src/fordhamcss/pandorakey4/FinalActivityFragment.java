@@ -227,9 +227,6 @@ public class FinalActivityFragment extends Fragment{
     	
     }
     
-    
-    
-    
 	public EventTree Load (Context context, String prefName, String key)
     {
     	SharedPreferences settings;
