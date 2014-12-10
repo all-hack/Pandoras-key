@@ -11,6 +11,7 @@ public class FinalActivity extends SingleFragmentActivity {
 
     @Override
     public Fragment createFragment() {
+        getActionBar().setIcon(R.drawable.open_chest);
    // 	outputStrings = getIntent().getStringArrayListExtra("OutputStrings");
         return new FinalActivityFragment();
     }

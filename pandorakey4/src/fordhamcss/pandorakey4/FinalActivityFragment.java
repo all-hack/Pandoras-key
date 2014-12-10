@@ -27,7 +27,7 @@ public class FinalActivityFragment extends Fragment{
 	EventTree loaded = new EventTree();
 	String save1 = "save1";
 	String open = "open";
-	
+
 	/*
 	public FinalActivityFragment (ArrayList<String> importedReturnStrings)
 	{
