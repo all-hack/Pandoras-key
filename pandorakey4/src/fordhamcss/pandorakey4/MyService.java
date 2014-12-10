@@ -390,7 +390,7 @@ public class MyService extends Service {
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
     	
-		Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();		
+		//Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();		
 
     	
 		return outputString;
@@ -433,10 +433,10 @@ public class MyService extends Service {
 		
 		
 		
-//		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
-//		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
-//		getApplication().startActivity(dialogIntent);		
+		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
+		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
+		getApplication().startActivity(dialogIntent);		
 		
 		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
 		
