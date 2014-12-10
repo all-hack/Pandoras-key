@@ -390,7 +390,7 @@ public class MyService extends Service {
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
     	
-		//Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();		
+		Toast.makeText(this, outputString, Toast.LENGTH_LONG).show();		
 
     	
 		return outputString;
@@ -415,16 +415,16 @@ public class MyService extends Service {
 		String open = "open";
 		
 		Store(this, dummyTree, save1, open);
-		loaded = Load(this, save1, open );
+//		loaded = Load(this, save1, open );
 		
-		loaded.insertLocation(new Event(5, "Da Club", "Place"));
+	/*	loaded.insertLocation(new Event(5, "Da Club", "Place"));
 		loaded.insertEvent(new Event(6, "Da Club","Contact", "Yo MAma"));
-		loaded.insertEvent(new Event(7,"Da Club","Contact", "HolyShit ItWerks"));
+		loaded.insertEvent(new Event(7,"Da Club","Contact", "HolyShit ItWerks"));*/
 		
 		
 		//For production, uses actual recorded data
 //		getOutput(theTree.root);
-		getOutput(loaded.root);
+//		getOutput(loaded.root);
 		ArrayList<String> outputStrings = new ArrayList<String>();		
 		for (int x=0; x<returnStrings.size(); x++)
 			outputStrings.add(generateOutputString(returnStrings.get(x)));
@@ -438,7 +438,7 @@ public class MyService extends Service {
 		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
 		getApplication().startActivity(dialogIntent);		
 		
-		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
+//		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
 		
 		
 	/*	ByteArrayOutputStream buffer = new ByteArrayOutputStream();
