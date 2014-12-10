@@ -1,6 +1,7 @@
 package fordhamcss.pandorakey4;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -287,8 +288,8 @@ public class MyService extends Service {
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 		}
 		}/* End of Class MyLocationListener */    
-    
-   /* public void getOutput(EventNode t)
+ 
+    public void getOutput(EventNode t)
     {
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
@@ -309,7 +310,53 @@ public class MyService extends Service {
 			getOutput(t.right);
 		}
     }
-    
+	
+    public String generateOutputString(Map<String, String> serviceOutput)
+    {
+    	String outputString = null;
+    	String username = "Stephen";
+    	
+    	if (serviceOutput.get("kind") == "location")
+    	{
+    		outputString = "You were at " + serviceOutput.get("locationName") + " at " + serviceOutput.get("timestamp");
+    		
+    	}
+    	
+    	else if (serviceOutput.get("kind") == "text")
+    	{
+    		outputString = "Text message ";
+    		if (username.equals(serviceOutput.get("from")))
+    			outputString += "sent to ";
+    		else
+    			outputString += "from ";
+    		outputString += serviceOutput.get("to") + " at " + serviceOutput.get("timestamp");
+    	}
+    	
+    	else if (serviceOutput.get("kind") == "call")
+    	{
+    		if (serviceOutput.get("missed").equals("true"))
+    			outputString = "Missed call ";
+    		else
+    			outputString = "Call ";
+    		
+    		if (username.equals(serviceOutput.get("from")))
+    			outputString += "to ";
+    		else
+    			outputString += "from ";
+    		outputString += serviceOutput.get("to") + " at " + serviceOutput.get("timestamp");
+    	}
+    	
+    	else if (serviceOutput.get("kind") == "contact")
+    	{
+    		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
+    	}
+    	
+		//Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();		
+
+    	
+		return outputString;
+    }
+	
     public String convertToString(long t)
     {
     	if (t == 1)
@@ -352,58 +399,16 @@ public class MyService extends Service {
     	
     }
     
-    public String generateOutputString(Map<String, String> serviceOutput)
-    {
-    	String outputString = null;
-    	String username = "Stephen";
-    	
-    	if (serviceOutput.get("kind") == "location")
-    	{
-    		outputString = "You were at " + serviceOutput.get("locationName") + " at " + serviceOutput.get("timestamp");
-    		
-    	}
-    	
-    	else if (serviceOutput.get("kind") == "text")
-    	{
-    		outputString = "Text message ";
-    		if (username.equals(serviceOutput.get("from")))
-    			outputString += "sent to ";
-    		else
-    			outputString += "from ";
-    		outputString += serviceOutput.get("to") + " at " + serviceOutput.get("timestamp");
-    	}
-    	
-    	else if (serviceOutput.get("kind") == "call")
-    	{
-    		if (serviceOutput.get("missed").equals("true"))
-    			outputString = "Missed call ";
-    		else
-    			outputString = "Call ";
-    		
-    		if (username.equals(serviceOutput.get("from")))
-    			outputString += "to ";
-    		else
-    			outputString += "from ";
-    		outputString += serviceOutput.get("to") + " at " + serviceOutput.get("timestamp");
-    	}
-    	
-    	else if (serviceOutput.get("kind") == "contact")
-    	{
-    		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
-    	}
-    	
-		Toast.makeText(this, outputString, Toast.LENGTH_LONG).show();		
-
-    	
-		return outputString;
-    }*/
+    
     
     @Override
 	public void onDestroy() {
 		super.onDestroy();
-		
-		myThread = new Thread(new MyThread());
-		myThread.start();
+
+//		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
+
+//		myThread = new Thread(new MyThread());
+		//myThread.start();
 		
 		//For development, uses dummy tree
 /*		EventTree dummyTree = new EventTree();
@@ -414,13 +419,18 @@ public class MyService extends Service {
 		dummyTree.insertEvent(new Event(9,"Full Moon Pizza","Place", "Person McNotPersonFace"));
 		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
     	
-//		getOutput(dummyTree.root);
-//		EventTree loaded = new EventTree();
+//		getOutput(dummyTree.root); */
+		EventTree loaded = new EventTree();
+ 
+ 
 		String save1 = "save1";
 		String open = "open";
 		
-		Store(getApplication().getApplicationContext(), dummyTree, save1, open); */
-//		loaded = Load(this, save1, open );
+//		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
+
+		
+		Store( getApplication().getApplicationContext(), theTree, save1, open); 
+		/*loaded = Load(getApplication().getApplicationContext(), save1, open ); */
 		
 	/*	loaded.insertLocation(new Event(5, "Da Club", "Place"));
 		loaded.insertEvent(new Event(6, "Da Club","Contact", "Yo MAma"));
@@ -428,56 +438,26 @@ public class MyService extends Service {
 		
 		
 		//For production, uses actual recorded data
-//		getOutput(theTree.root);
-//		getOutput(loaded.root);
-	//	ArrayList<String> outputStrings = new ArrayList<String>();		
-		//for (int x=0; x<returnStrings.size(); x++)
-			//outputStrings.add(generateOutputString(returnStrings.get(x)));
+//		getOutput(theTree.root); 
+/*		getOutput(loaded.root);
+		ArrayList<String> outputStrings = new ArrayList<String>();		
+		for (int x=0; x<returnStrings.size(); x++)
+			outputStrings.add(generateOutputString(returnStrings.get(x)));
+	*/	
 		
 		
 		
 		
-		/*
 		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
+	
 		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
-		getApplication().startActivity(dialogIntent);		*/
+		getApplication().startActivity(dialogIntent);		
 		
-//		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
+		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
 		
 		
-	/*	ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		ObjectOutputStream oos;
-		try {
-			oos = new ObjectOutputStream(buffer);
-			oos.writeObject(theTree);
-			oos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		byte[] rawData = buffer.toByteArray();
-		FileOutputStream outputStream;
-		try {
-			outputStream = openFileOutput("File", Context.MODE_PRIVATE);
-			try {
-				outputStream.write(rawData);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				outputStream.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/	
+	
 	}
     
     public void Store(Context context, EventTree tree, String prefName, String key)
@@ -541,7 +521,7 @@ public class MyService extends Service {
     }
     
     
-   /* public EventTree Load (Context context, String prefName, String key)
+   public EventTree Load (Context context, String prefName, String key)
     {
     	SharedPreferences settings;
     	
@@ -566,7 +546,7 @@ public class MyService extends Service {
     	
     	return (EventTree) tree;
     	
-    }*/
+    }
     
     
     
