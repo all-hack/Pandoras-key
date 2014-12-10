@@ -66,7 +66,6 @@ public class FinalActivityFragment extends Fragment{
 	{
 		View v = inflater.inflate(R.layout.activity_final, container, false);
 		mListView = (ListView) v.findViewById(R.id.listView);
-        mListView.addHeaderView(inflater.inflate(R.layout.button_layout, null));
 
         setupAdapter();
 
