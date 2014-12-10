@@ -11,7 +11,7 @@ public class FinalActivity extends SingleFragmentActivity {
 
     @Override
     public Fragment createFragment() {
-    	outputStrings = getIntent().getStringArrayListExtra("OutputStrings");
-        return new FinalActivityFragment(outputStrings);
+   // 	outputStrings = getIntent().getStringArrayListExtra("OutputStrings");
+        return new FinalActivityFragment();
     }
 }

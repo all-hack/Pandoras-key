@@ -28,6 +28,7 @@ public class FinalActivityFragment extends Fragment{
 	String save1 = "save1";
 	String open = "open";
 	
+	/*
 	public FinalActivityFragment (ArrayList<String> importedReturnStrings)
 	{
 		super();
@@ -40,21 +41,21 @@ public class FinalActivityFragment extends Fragment{
 		outputStrings = moutputStrings; 
 		
 		
-		outputStrings = importedReturnStrings;*/
-	}
+		outputStrings = importedReturnStrings;
+	}*/
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
-		Toast.makeText(getActivity().getApplication(),getActivity().getApplication().toString(), Toast.LENGTH_SHORT).show();		
-//		loaded = Load(getActivity().getApplication(), save1, open );
-/*		getOutput(loaded.root);
+//		Toast.makeText(getActivity().getApplication(),getActivity().getApplication().toString(), Toast.LENGTH_SHORT).show();		
+		loaded = Load(getActivity().getApplication(), save1, open );
+		getOutput(loaded.root);
 		ArrayList<String> moutputStrings = new ArrayList<String>();		
 		for (int x=0; x<returnStrings.size(); x++)
 			moutputStrings.add(generateOutputString(returnStrings.get(x)));
-		outputStrings = moutputStrings; */ 
+		outputStrings = moutputStrings;  
 		
 		
 		
@@ -76,13 +77,13 @@ public class FinalActivityFragment extends Fragment{
 	{	
 		//Toast.makeText(getActivity().getApplication(), "please", Toast.LENGTH_SHORT).show();		
 
-		
+		/*
 		loaded = Load(getActivity().getApplication(), save1, open );
 		getOutput(loaded.root);
 		ArrayList<String> moutputStrings = new ArrayList<String>();		
 		for (int x=0; x<returnStrings.size(); x++)
 			moutputStrings.add(generateOutputString(returnStrings.get(x)));
-		outputStrings = moutputStrings;
+		outputStrings = moutputStrings;*/
 		
 		if (getActivity() == null || mListView == null)
             return;

@@ -286,7 +286,7 @@ public class MyService extends Service {
 		}
 		}/* End of Class MyLocationListener */    
     
-    public void getOutput(EventNode t)
+   /* public void getOutput(EventNode t)
     {
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
@@ -394,7 +394,7 @@ public class MyService extends Service {
 
     	
 		return outputString;
-    }
+    }*/
     
     @Override
 	public void onDestroy() {
@@ -425,9 +425,9 @@ public class MyService extends Service {
 		//For production, uses actual recorded data
 //		getOutput(theTree.root);
 //		getOutput(loaded.root);
-		ArrayList<String> outputStrings = new ArrayList<String>();		
-		for (int x=0; x<returnStrings.size(); x++)
-			outputStrings.add(generateOutputString(returnStrings.get(x)));
+	//	ArrayList<String> outputStrings = new ArrayList<String>();		
+		//for (int x=0; x<returnStrings.size(); x++)
+			//outputStrings.add(generateOutputString(returnStrings.get(x)));
 		
 		
 		
@@ -435,7 +435,7 @@ public class MyService extends Service {
 		
 		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
 		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
+//		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
 		getApplication().startActivity(dialogIntent);		
 		
 //		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
@@ -494,7 +494,7 @@ public class MyService extends Service {
     	editor.apply();    	    	    	    	    	    	
     }
     
-    public EventTree Load (Context context, String prefName, String key)
+   /* public EventTree Load (Context context, String prefName, String key)
     {
     	SharedPreferences settings;
     	
@@ -519,7 +519,7 @@ public class MyService extends Service {
     	
     	return (EventTree) tree;
     	
-    }
+    }*/
     
     
     
