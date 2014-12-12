@@ -3,18 +3,18 @@ package fordhamcss.pandorakey4;
 public class Event {
 	
 	// All events have below fields
-	private long time;
+	private String time;
 	public String place;
 	private String type;
 	public String contactName;
 	
-	public Event(long inTime, String inPlace, String inType) {
+	public Event(String inTime, String inPlace, String inType) {
 		time = inTime;
 		place = inPlace;
 		type = inType;
 	}
 	
-	public Event(long inTime, String inPlace, String inType, String inName) {
+	public Event(String inTime, String inPlace, String inType, String inName) {
 		time = inTime;
 		place = inPlace;
 		type = inType;
@@ -26,7 +26,7 @@ public class Event {
 		return contactName;
 	}
 	
-	public long getTime() {
+	public String getTime() {
 		return time;
 	}
 	

@@ -1,6 +1,7 @@
 package fordhamcss.pandorakey4;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,6 +46,13 @@ public class MyService extends Service {
 	EventTree theTree = new EventTree();
 	List<Map<String, String>> returnStrings = new ArrayList<Map<String, String>>();
 
+
+	String am_pm = "";		
+	int tHour;
+	int tMinute;
+	int tpm;
+	
+	
 	Thread myThread;
 	
 	
@@ -85,15 +93,21 @@ public class MyService extends Service {
     	ContentResolver cr = getContentResolver();
     	String[] array = new String[0];
     	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
-		
-		Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+    	
+    
+    	
+    	String f = make();
+    	
+		Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, f, Toast.LENGTH_SHORT).show();
 
+		
 		/* Use the LocationManager class to obtain GPS locations */
-		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+/*		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		LocationListener mlocListener = new MyLocationListener();
 		// below updates on time interval (mill seconds) AND location (meters)
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-				5 * 1000, 0, mlocListener);
+				5 * 1000, 0, mlocListener); */
 		
 /*
 		for (int i=0; i<urls.length; i++) {
@@ -211,7 +225,9 @@ public class MyService extends Service {
     	int diff = newContactList.getCount() - initialContactList.getCount();
 
     	if(diff > 0) {
-    		int time = (int) (System.currentTimeMillis());
+    		
+
+        	String time = make();
 
     		newContactList.moveToLast();
 
@@ -246,7 +262,7 @@ public class MyService extends Service {
 			Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
 			CurrLocation.add(CurrentLocation);
 
-			int time = (int)(System.currentTimeMillis());
+			String time = make();
 			Event newPlace = new Event(time, CurrentLocation, "Place");
 			theTree.insertLocation(newPlace);
 		}
@@ -259,7 +275,7 @@ public class MyService extends Service {
 			//	Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
 			CurrLocation.add(CurrentLocation);
 
-			int time = (int)(System.currentTimeMillis());
+			String time = make();
 			Event newPlace = new Event(time, CurrentLocation, "Place");
 			theTree.insertLocation(newPlace);
 		}
@@ -272,16 +288,16 @@ public class MyService extends Service {
 		}
 		@Override
 		public void onProviderDisabled(String provider) {
-		Toast.makeText( getApplicationContext(),
-		"Gps Disabled",
-		Toast.LENGTH_SHORT ).show();
+//		Toast.makeText( getApplicationContext(),
+	//	"Gps Disabled",
+//		Toast.LENGTH_SHORT ).show();
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
-		Toast.makeText( getApplicationContext(),
-		"Gps Enabled",
-		Toast.LENGTH_SHORT).show();
+//		Toast.makeText( getApplicationContext(),
+	//	"Gps Enabled",
+		//Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
@@ -294,7 +310,7 @@ public class MyService extends Service {
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
     	locOutput.put("locationName" ,  t.theEvent.get(0).place);
-    	locOutput.put("timestamp" , convertToString(t.theEvent.get(0).getTime()));
+    	locOutput.put("timestamp" , t.theEvent.get(0).getTime());
     	returnStrings.add(locOutput);
     	
 	    if(t.left != null) {
@@ -302,7 +318,7 @@ public class MyService extends Service {
 		    	Map<String, String> tempServiceOutput = new HashMap<String, String>();
 		    	tempServiceOutput.put("kind" , "contact");
 		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).getContactName());
-		    	tempServiceOutput.put("timestamp" , convertToString(t.left.theEvent.get(i).getTime()));
+		    	tempServiceOutput.put("timestamp" , t.left.theEvent.get(i).getTime());
 		    	returnStrings.add(tempServiceOutput);
 			}
 		}
@@ -357,47 +373,6 @@ public class MyService extends Service {
 		return outputString;
     }
 	
-    public String convertToString(long t)
-    {
-    	if (t == 1)
-    		return "1";
-    	else
-    	if (t == 2)
-    		return "2";
-    	else
-		if (t == 3)
-    		return "3";
-    	else
-    	if (t == 4)
-    		return "4";
-    	else    		
-    	if (t == 5)
-    		return "5";
-    	else
-    	if (t == 6)
-    		return "6";
-    	else
-		if (t == 7)
-     		return "7";
-    	else
-    	if (t == 8)
-    		return "8";
-    	else    		
-    	if (t == 9)
-    		return "9";
-    	else
-    	if (t == 10)
-    		return "10";
-    	else
-		if (t == 11)
-    		return "11";
-    	else
-    	if (t == 12)
-    		return "12";
-    	else 
-    		return null;
-    	
-    }
     
     
     
@@ -407,8 +382,8 @@ public class MyService extends Service {
 
 //		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
 
-//		myThread = new Thread(new MyThread());
-		//myThread.start();
+		myThread = new Thread(new MyThread());
+		myThread.start();
 		
 		//For development, uses dummy tree
 /*		EventTree dummyTree = new EventTree();
@@ -420,16 +395,16 @@ public class MyService extends Service {
 		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
     	
 //		getOutput(dummyTree.root); */
-		EventTree loaded = new EventTree();
+		//EventTree loaded = new EventTree();
  
  
-		String save1 = "save1";
-		String open = "open";
+	//	String save1 = "save1";
+//		String open = "open";
 		
 //		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
 
 		
-		Store( getApplication().getApplicationContext(), theTree, save1, open); 
+//		Store( getApplication().getApplicationContext(), theTree, save1, open); 
 		/*loaded = Load(getApplication().getApplicationContext(), save1, open ); */
 		
 	/*	loaded.insertLocation(new Event(5, "Da Club", "Place"));
@@ -448,11 +423,11 @@ public class MyService extends Service {
 		
 		
 		
-		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
+	/*	Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
 	
 		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
-		getApplication().startActivity(dialogIntent);		
+		getApplication().startActivity(dialogIntent);		*/
 		
 		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
 		
@@ -485,27 +460,35 @@ public class MyService extends Service {
     	@Override 
     	public void run()
     	{
+    		
+//    		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+//    		LocationListener mlocListener = new MyLocationListener();
+    		// below updates on time interval (mill seconds) AND location (meters)
+//    		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
+//    				5 * 1000, 0, mlocListener);
+    		
+    		
     		//For development, uses dummy tree
     		EventTree dummyTree = new EventTree();
-    		dummyTree.insertLocation(new Event(5, "Pugsley's Pizza", "Place"));
-    		dummyTree.insertEvent(new Event(6, "Pugsley's Pizza ","Contact", "Person McPersonface"));
-    		dummyTree.insertEvent(new Event(7,"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
-    		dummyTree.insertLocation(new Event(8, "Full Moon Pizza", "Place"));
-    		dummyTree.insertEvent(new Event(9,"Full Moon Pizza","Place", "Person McNotPersonFace"));
-    		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
-    		dummyTree.insertLocation(new Event(5, "Pugsley's Pizza", "Place"));
-    		dummyTree.insertEvent(new Event(6, "Pugsley's Pizza ","Contact", "Person McPersonface"));
-    		dummyTree.insertEvent(new Event(7,"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
-    		dummyTree.insertLocation(new Event(8, "Full Moon Pizza", "Place"));
-    		dummyTree.insertEvent(new Event(9,"Full Moon Pizza","Place", "Person McNotPersonFace"));
-    		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
-    		dummyTree.insertLocation(new Event(5, "Pugsley's Pizza", "Place"));
-    		dummyTree.insertEvent(new Event(6, "Pugsley's Pizza ","Contact", "Person McPersonface"));
-    		dummyTree.insertEvent(new Event(7,"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
-    		dummyTree.insertLocation(new Event(8, "Full Moon Pizza", "Place"));
-    		dummyTree.insertEvent(new Event(9,"Full Moon Pizza","Place", "Person McNotPersonFace"));
-    		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
-        	
+    		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
+    		dummyTree.insertEvent(new Event(make(), "Pugsley's Pizza ","Contact", "Person McPersonface"));
+    		dummyTree.insertEvent(new Event(make(),"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
+    		dummyTree.insertLocation(new Event(make(), "Full Moon Pizza", "Place"));
+    		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
+    		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
+    		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
+    		dummyTree.insertEvent(new Event(make(), "Pugsley's Pizza ","Contact", "Person McPersonface"));
+    		dummyTree.insertEvent(new Event(make(),"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
+    		dummyTree.insertLocation(new Event(make(), "Full Moon Pizza", "Place"));
+    		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
+    		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
+    		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
+    		dummyTree.insertEvent(new Event(make(), "Pugsley's Pizza ","Contact", "Person McPersonface"));
+    		dummyTree.insertEvent(new Event(make(),"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
+    		dummyTree.insertLocation(new Event(make(), "Full Moon Pizza", "Place"));
+    		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
+    		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace")); 
+        
 //    		getOutput(dummyTree.root);
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";
@@ -516,7 +499,8 @@ public class MyService extends Service {
     		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
     		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //    		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
-    		getApplication().startActivity(dialogIntent);		
+    		getApplication().startActivity(dialogIntent); 		
+    		
     	}
     }
     
@@ -548,7 +532,30 @@ public class MyService extends Service {
     	
     }
     
-    
+   
+   String make()
+   {
+	   Calendar calendar = Calendar.getInstance();
+	   int hour = calendar.get(Calendar.HOUR);
+	   int minute = calendar.get(Calendar.MINUTE);
+	   int pm = calendar.get(Calendar.AM_PM);   
+	   
+	   String time = hour+":"+minute+" "+am_pm(pm);
+	   
+	   return time;
+   }
+   
+   String am_pm (int pm)
+   {
+	   	if (pm == 1)
+	   	{
+	   		return "PM";
+	   	}
+	   	else
+	   	{
+	   		return "AM";
+	   	}
+   }
     
     
     

@@ -1,6 +1,7 @@
 package fordhamcss.pandorakey4;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,21 +29,6 @@ public class FinalActivityFragment extends Fragment{
 	String save1 = "save1";
 	String open = "open";
 
-	/*
-	public FinalActivityFragment (ArrayList<String> importedReturnStrings)
-	{
-		super();
-		
-	//	loaded = Load(getActivity().getApplication(), save1, open );
-/*		getOutput(loaded.root);
-		ArrayList<String> moutputStrings = new ArrayList<String>();		
-		for (int x=0; x<returnStrings.size(); x++)
-			moutputStrings.add(generateOutputString(returnStrings.get(x)));
-		outputStrings = moutputStrings; 
-		
-		
-		outputStrings = importedReturnStrings;
-	}*/
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -121,7 +107,7 @@ public class FinalActivityFragment extends Fragment{
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
     	locOutput.put("locationName" ,  t.theEvent.get(0).place);
-    	locOutput.put("timestamp" , convertToString(t.theEvent.get(0).getTime()));
+    	locOutput.put("timestamp" , t.theEvent.get(0).getTime());
     	returnStrings.add(locOutput);
     	
 	    if(t.left != null) {
@@ -129,7 +115,7 @@ public class FinalActivityFragment extends Fragment{
 		    	Map<String, String> tempServiceOutput = new HashMap<String, String>();
 		    	tempServiceOutput.put("kind" , "contact");
 		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).getContactName());
-		    	tempServiceOutput.put("timestamp" , convertToString(t.left.theEvent.get(i).getTime()));
+		    	tempServiceOutput.put("timestamp" , t.left.theEvent.get(i).getTime());
 		    	returnStrings.add(tempServiceOutput);
 			}
 		}
@@ -184,47 +170,6 @@ public class FinalActivityFragment extends Fragment{
 		return outputString;
     }
 	
-    public String convertToString(long t)
-    {
-    	if (t == 1)
-    		return "1";
-    	else
-    	if (t == 2)
-    		return "2";
-    	else
-		if (t == 3)
-    		return "3";
-    	else
-    	if (t == 4)
-    		return "4";
-    	else    		
-    	if (t == 5)
-    		return "5";
-    	else
-    	if (t == 6)
-    		return "6";
-    	else
-		if (t == 7)
-     		return "7";
-    	else
-    	if (t == 8)
-    		return "8";
-    	else    		
-    	if (t == 9)
-    		return "9";
-    	else
-    	if (t == 10)
-    		return "10";
-    	else
-		if (t == 11)
-    		return "11";
-    	else
-    	if (t == 12)
-    		return "12";
-    	else 
-    		return null;
-    	
-    }
     
 	public EventTree Load (Context context, String prefName, String key)
     {
@@ -252,5 +197,28 @@ public class FinalActivityFragment extends Fragment{
     	return (EventTree) tree;
     	
     }
+	 String make()
+	   {
+		   Calendar calendar = Calendar.getInstance();
+		   int hour = calendar.get(Calendar.HOUR);
+		   int minute = calendar.get(Calendar.MINUTE);
+		   int pm = calendar.get(Calendar.AM_PM);   
+		   
+		   String time = hour+":"+minute+" "+am_pm(pm);
+		   
+		   return time;
+	   }
+	   
+	   String am_pm (int pm)
+	   {
+		   	if (pm == 1)
+		   	{
+		   		return "PM";
+		   	}
+		   	else
+		   	{
+		   		return "AM";
+		   	}
+	   }
 	
 }
