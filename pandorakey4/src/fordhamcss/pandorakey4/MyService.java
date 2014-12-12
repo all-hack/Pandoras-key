@@ -1,7 +1,10 @@
 package fordhamcss.pandorakey4;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +24,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
@@ -39,18 +44,23 @@ public class MyService extends Service {
 	// initial contact list is saved
 	Cursor initialContactList;
 	
-	String CurrentLocation = "Null";
+	int tTimer = 1;
+	int tHour;
+	int tMinute;
+	Boolean test = false;
+	LocationManager mlocManager;
+	LocationListener mlocListener;
+
+	Location Where = null;
+	String CurrentLocation = null;
+	String Text;
 	LinkedList<String> CurrLocation = new LinkedList<String>();
 	LinkedList<String> CurrContact = new LinkedList<String>();
 	
 	EventTree theTree = new EventTree();
 	List<Map<String, String>> returnStrings = new ArrayList<Map<String, String>>();
 
-
-	String am_pm = "";		
-	int tHour;
-	int tMinute;
-	int tpm;
+	
 	
 	
 	Thread myThread;
@@ -93,22 +103,34 @@ public class MyService extends Service {
     	ContentResolver cr = getContentResolver();
     	String[] array = new String[0];
     	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
-    	
-    
-    	
-    	String f = make();
-    	
+    	    	
 		Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
-		Toast.makeText(this, f, Toast.LENGTH_SHORT).show();
+//		Toast.makeText(this, f, Toast.LENGTH_SHORT).show();
 
+		 Calendar calendar = Calendar.getInstance();
+		 tHour = calendar.get(Calendar.HOUR_OF_DAY);
+		 tMinute = calendar.get(Calendar.MINUTE)+tTimer;
 		
+		 
+		 
 		/* Use the LocationManager class to obtain GPS locations */
-/*		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		LocationListener mlocListener = new MyLocationListener();
-		// below updates on time interval (mill seconds) AND location (meters)
-		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-				5 * 1000, 0, mlocListener); */
+		 mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		 mlocListener = new MyLocationListener();
+		// below updates on time interval (mill seconds) AND location (meters)		
 		
+		Where = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
+		
+		//Toast.makeText(this, ""+Where.toString(), Toast.LENGTH_SHORT).show();
+		
+		
+		
+		if (test == false)
+			mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
+				5 * 60 * 60* 1000, 5, mlocListener); 
+		else 
+			mlocListener.onLocationChanged(Where);
+		
+
 /*
 		for (int i=0; i<urls.length; i++) {
 			try {
@@ -246,58 +268,85 @@ public class MyService extends Service {
     
     public class MyLocationListener implements LocationListener {
 		
-		@Override
+    	
+    	
+    	@Override
 		public void onLocationChanged(Location loc) {
-		double lat = loc.getLatitude();
-		double lon = loc.getLongitude();
-		
-		//String Text = "My current location is: " + "Latitud = "
-		//+ loc.getLatitude() + "Longitud = " + loc.getLongitude();
-		
-		
-		String Text = getCompleteAddressString(lat, lon);
-		
-		if (CurrentLocation == "Null") {
-			CurrentLocation = Text;
-			Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
-			CurrLocation.add(CurrentLocation);
+					
+    	Calendar calendar = Calendar.getInstance();
+   		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+   		int minute = calendar.get(Calendar.MINUTE);	
+    		
+    	if (timer( hour, minute ) == true) 	
+    	{
+			double lat = loc.getLatitude();
+			double lon = loc.getLongitude();
+				
+	  	   
+			
+			//String Text = "My current location is: " + "Latitud = "
+			//+ loc.getLatitude() + "Longitud = " + loc.getLongitude();
+			
+//			Toast.makeText( getApplicationContext(), "01:"+CurrentLocation, Toast.LENGTH_SHORT).show();
+//			Toast.makeText( getApplicationContext(), "02:"+Text, Toast.LENGTH_SHORT).show();
 
-			String time = make();
-			Event newPlace = new Event(time, CurrentLocation, "Place");
-			theTree.insertLocation(newPlace);
-		}
-
-		checkContacts();
-
-		if(CurrentLocation != Text )
-		{
-			CurrentLocation = Text;		
-			//	Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
-			CurrLocation.add(CurrentLocation);
-
-			String time = make();
-			Event newPlace = new Event(time, CurrentLocation, "Place");
-			theTree.insertLocation(newPlace);
-		}
+			
+			Text = getCompleteAddressString(lat, lon);
+			
+//			Toast.makeText( getApplicationContext(), "03:"+CurrentLocation, Toast.LENGTH_SHORT).show();
+//			Toast.makeText( getApplicationContext(), "04:"+Text, Toast.LENGTH_SHORT).show();
 	
-		/*else if(CurrentLocation == Text)
-		{
-			Toast.makeText(getApplicationContext(), "you are in the same place", Toast.LENGTH_SHORT).show();
-		}*/
+			if (CurrentLocation == null) {
+				
+//				Toast.makeText( getApplicationContext(), "05:"+CurrentLocation, Toast.LENGTH_SHORT).show();
+				CurrentLocation = Text;
+				Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
+				CurrLocation.add(CurrentLocation);
+	
+				String time = make();
+				Event newPlace = new Event(time, CurrentLocation, "Place");
+				theTree.insertLocation(newPlace);
+			}
+			else
+				
+			
+			if(CurrentLocation != Text )
+			{
+				CurrentLocation = Text;		
+					Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
+				CurrLocation.add(CurrentLocation);
+	
+				String time = make();
+				Event newPlace = new Event(time, CurrentLocation, "Place");
+				theTree.insertLocation(newPlace);
+			}
 		
+			else if(CurrentLocation == Text)
+			{
+				Toast.makeText(getApplicationContext(), "you are in the same place", Toast.LENGTH_SHORT).show();
+			}
+    	
+    	
+			checkContacts();
+
+    	
+    	}
+    	else 
+    		onDestroy();
+    	
 		}
 		@Override
 		public void onProviderDisabled(String provider) {
-//		Toast.makeText( getApplicationContext(),
-	//	"Gps Disabled",
-//		Toast.LENGTH_SHORT ).show();
+		Toast.makeText( getApplicationContext(),
+		"Gps Disabled",
+		Toast.LENGTH_SHORT ).show();
 		}
 
 		@Override
 		public void onProviderEnabled(String provider) {
-//		Toast.makeText( getApplicationContext(),
-	//	"Gps Enabled",
-		//Toast.LENGTH_SHORT).show();
+		Toast.makeText( getApplicationContext(),
+		"Gps Enabled",
+		Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
@@ -381,6 +430,7 @@ public class MyService extends Service {
 		super.onDestroy();
 
 //		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
+		mlocManager.removeUpdates(mlocListener);
 
 		myThread = new Thread(new MyThread());
 		myThread.start();
@@ -398,13 +448,13 @@ public class MyService extends Service {
 		//EventTree loaded = new EventTree();
  
  
-	//	String save1 = "save1";
-//		String open = "open";
+//		String save1 = "save1";
+	//	String open = "open";
 		
 //		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
 
 		
-//		Store( getApplication().getApplicationContext(), theTree, save1, open); 
+		//Store( getApplication().getApplicationContext(), theTree, save1, open); 
 		/*loaded = Load(getApplication().getApplicationContext(), save1, open ); */
 		
 	/*	loaded.insertLocation(new Event(5, "Da Club", "Place"));
@@ -422,12 +472,13 @@ public class MyService extends Service {
 		
 		
 		
-		
-	/*	Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
+		/*
+		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
 	
 		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  
-		getApplication().startActivity(dialogIntent);		*/
+		getApplication().startActivity(dialogIntent);
+		*/
 		
 		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
 		
@@ -469,7 +520,7 @@ public class MyService extends Service {
     		
     		
     		//For development, uses dummy tree
-    		EventTree dummyTree = new EventTree();
+    		/*EventTree dummyTree = new EventTree();
     		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
     		dummyTree.insertEvent(new Event(make(), "Pugsley's Pizza ","Contact", "Person McPersonface"));
     		dummyTree.insertEvent(new Event(make(),"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
@@ -489,12 +540,12 @@ public class MyService extends Service {
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace")); 
         
-//    		getOutput(dummyTree.root);
+//    		getOutput(dummyTree.root);*/
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";
     		String open = "open";
     		
-    		Store(getApplication().getApplicationContext(), dummyTree, save1, open);
+    		Store(getApplication().getApplicationContext(), theTree, save1, open);
     		
     		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
     		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -540,7 +591,13 @@ public class MyService extends Service {
 	   int minute = calendar.get(Calendar.MINUTE);
 	   int pm = calendar.get(Calendar.AM_PM);   
 	   
-	   String time = hour+":"+minute+" "+am_pm(pm);
+	   SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+		
+	   Date mTime = new GregorianCalendar( 0, 0, 0, hour, minute).getTime();
+	   
+	   
+	   
+	   String time = df.format(mTime).toString()+am_pm(pm);
 	   
 	   return time;
    }
@@ -549,12 +606,31 @@ public class MyService extends Service {
    {
 	   	if (pm == 1)
 	   	{
-	   		return "PM";
+	   		return " PM";
 	   	}
 	   	else
 	   	{
-	   		return "AM";
+	   		return " AM";
 	   	}
+   }
+   
+   Boolean timer(int currentH, int currentM )
+   {
+	  
+	   if ( currentH >= tHour)
+	   {
+		   if (currentH == tHour)
+		   {
+			   if(currentM >= tMinute)
+				   return false;
+			   else 
+				   return true;
+		   }
+		   else 
+			   return false;
+	   }	   
+	   else 
+		   return true;
    }
     
     
