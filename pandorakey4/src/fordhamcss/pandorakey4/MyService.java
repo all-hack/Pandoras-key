@@ -519,7 +519,7 @@ public class MyService extends Service {
     		
     		
     		//For development, uses dummy tree
-    		/*EventTree dummyTree = new EventTree();
+    		EventTree dummyTree = new EventTree();
     		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
     		dummyTree.insertEvent(new Event(make(), "Pugsley's Pizza ","Contact", "Person McPersonface"));
     		dummyTree.insertEvent(new Event(make(),"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
@@ -544,7 +544,9 @@ public class MyService extends Service {
     		String save1 = "save1";
     		String open = "open";
     		
-    		Store(getApplication().getApplicationContext(), theTree, save1, open);
+    		Store(getApplication().getApplicationContext(), dummyTree, save1, open);
+
+//    		Store(getApplication().getApplicationContext(), theTree, save1, open);
     		
     		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
     		dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

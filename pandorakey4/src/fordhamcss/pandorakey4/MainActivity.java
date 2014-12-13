@@ -21,11 +21,11 @@ public class MainActivity extends Activity {
 
     public void openReport(View view)
     {
-    	ArrayList<String> outputStrings = new ArrayList<String>(); //Replace with code to pull saved report
+  //  	ArrayList<String> outputStrings = new ArrayList<String>(); //Replace with code to pull saved report
     	
 		Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
-		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  		
-        startActivityForResult(dialogIntent, 0);
+//		dialogIntent.putStringArrayListExtra("OutputStrings", outputStrings);  		
+        startActivity(dialogIntent);
     }
     
     public void startService(View view) 
