@@ -1,3 +1,5 @@
+//Needs revision/commenting
+
 package fordhamcss.pandorakey4;
 
 import java.util.ArrayList;
@@ -16,10 +18,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-//import android.widget.Toast;
 
 public class FinalActivityFragment extends Fragment{
 	ArrayList<String> outputStrings;

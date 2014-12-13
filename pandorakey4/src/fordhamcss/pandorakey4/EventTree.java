@@ -4,7 +4,6 @@ public class EventTree {
 	
 	public EventNode root;
 	
-	// constructor method
 	public EventTree() {
 		root = null;
 	}

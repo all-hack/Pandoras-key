@@ -1,10 +1,10 @@
+//Needs revision/commenting
+
 package fordhamcss.pandorakey4;
 
 import java.util.ArrayList;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.view.View;
 
 public class FinalActivity extends SingleFragmentActivity {
 	public ArrayList<String> outputStrings;
@@ -12,7 +12,7 @@ public class FinalActivity extends SingleFragmentActivity {
     @Override
     public Fragment createFragment() {
         getActionBar().setIcon(R.drawable.open_chest);
-   // 	outputStrings = getIntent().getStringArrayListExtra("OutputStrings");
+//   	    outputStrings = getIntent().getStringArrayListExtra("OutputStrings");
         return new FinalActivityFragment();
     }
 }
