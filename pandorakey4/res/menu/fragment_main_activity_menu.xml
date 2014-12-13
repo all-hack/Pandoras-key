@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >   
+    
+    <item 
+        android:id="@+id/menu_item_old_reports"
+        android:title="@string/previousReport"
+        android:showAsAction="ifRoom|withText"
+        />
+    
+     <item 
+        android:id="@+id/menu_item_start"
+        android:title="@string/startTracking"
+        android:showAsAction="ifRoom|withText"
+        />
+      
+     <item 
+        android:id="@+id/menu_item_stop"
+        android:title="@string/stopTracking"
+        android:showAsAction="ifRoom|withText"
+        />
+
+</menu>

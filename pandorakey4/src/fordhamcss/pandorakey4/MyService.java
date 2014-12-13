@@ -542,8 +542,14 @@ public class MyService extends Service {
 //    		getOutput(dummyTree.root);*/
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";
+    		String save2 = "save2";
+    		String save3 = "save3";
+    		String save4 = "save4";
+    		String save5 = "save5";
     		String open = "open";
-    		
+    		/*loaded = Load(getApplication().getApplicationContext(), save1, open ); */
+
+    		//if(Load(getApplication().getApplicationContext(), save1, open) )
     		Store(getApplication().getApplicationContext(), dummyTree, save1, open);
 
 //    		Store(getApplication().getApplicationContext(), theTree, save1, open);
@@ -555,6 +561,8 @@ public class MyService extends Service {
     		
     	}
     }
+    
+   
     
     
    public EventTree Load (Context context, String prefName, String key)
