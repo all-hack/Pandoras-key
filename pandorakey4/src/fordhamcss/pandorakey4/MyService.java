@@ -44,7 +44,7 @@ public class MyService extends Service {
 	// initial contact list is saved
 	Cursor initialContactList;
 	
-	int tTimer = 1;
+	int tTimer = 12;
 	int tHour;
 	int tMinute;
 	Boolean test = false;
@@ -104,12 +104,11 @@ public class MyService extends Service {
     	String[] array = new String[0];
     	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
     	    	
-		Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
-//		Toast.makeText(this, f, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();//		Toast.makeText(this, f, Toast.LENGTH_SHORT).show();
 
 		 Calendar calendar = Calendar.getInstance();
-		 tHour = calendar.get(Calendar.HOUR_OF_DAY);
-		 tMinute = calendar.get(Calendar.MINUTE)+tTimer;
+		 tHour = calendar.get(Calendar.HOUR_OF_DAY)+tTimer;
+		 tMinute = calendar.get(Calendar.MINUTE);
 		
 		 
 		 
