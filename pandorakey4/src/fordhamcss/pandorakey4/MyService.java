@@ -381,7 +381,7 @@ public class MyService extends Service {
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace")); 
         
-//    		getOutput(dummyTree.root);*/
+//    		formatData(dummyTree.root);*/
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";
     		String open = "open";
