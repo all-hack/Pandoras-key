@@ -1,3 +1,5 @@
+//Needs revision/commenting
+
 package fordhamcss.pandorakey4;
 
 import java.text.SimpleDateFormat;
@@ -24,9 +26,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
@@ -34,13 +34,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 public class MyService extends Service {
-//    int counter = 0;
-//    URL[] urls=new URL[5];
-        
-//    static final int UPDATE_INTERVAL = 1000;
-//    private Timer timer = new Timer();
-	
-	
+
 	// initial contact list is saved
 	Cursor initialContactList;
 	
@@ -60,42 +54,13 @@ public class MyService extends Service {
 	EventTree theTree = new EventTree();
 	List<Map<String, String>> returnStrings = new ArrayList<Map<String, String>>();
 
-	
-	
-	
 	Thread myThread;
-	
-	
-	/*
-	daTree = new EventTree();
 
-	daTree.insertLocation(new PlaceEvent(5, "location", "Pugsley's Pizza"));
-	daTree.insertEvent(new ContactEvent(6, "location", "First Contact"));
-	daTree.insertEvent(new ContactEvent(7, "location", "Second Contact"));
-
-	daTree.insertLocation(new PlaceEvent(8, "Another Location", "Full Moon Pizza"));
-	daTree.insertEvent(new ContactEvent(9, "Another Location", "Third Contact"));
-	daTree.insertEvent(new ContactEvent(10, "Another Location", "Fourth Contact"));
-	*/
-	//System.out.println(daTree.root.theEvent);
-	//System.out.println(daTree.root.theEvent);
-	
-	
-	/* An abstract method we must implement. 
-	 The onBind() method enables you to bind an activity to a service. 
-	 This in turn enables an activity to directly access members and methods inside a service. 
-	 For now, you simply return a null for this method. 
-	 */
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
     }
 
-	/*
-	The onStartCommand() method is called when you start the service explicitly using the startService() method. 
-	This method signifies the start of the service, and you code it to do the things you need to do for your service. 
-	In this method, you returned the constant START_STICKY so that the service will continue to run until it is explicitly stopped.
-	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// We want this service to continue running until it is explicitly  stopped, so return sticky.
@@ -104,7 +69,7 @@ public class MyService extends Service {
     	String[] array = new String[0];
     	initialContactList = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, array, null);
     	    	
-		Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();//		Toast.makeText(this, f, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
 
 		 Calendar calendar = Calendar.getInstance();
 		 tHour = calendar.get(Calendar.HOUR_OF_DAY)+tTimer;
@@ -118,99 +83,16 @@ public class MyService extends Service {
 		// below updates on time interval (mill seconds) AND location (meters)		
 		
 		Where = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
-		
-		//Toast.makeText(this, ""+Where.toString(), Toast.LENGTH_SHORT).show();
-		
-		
-		
+
 		if (test == false)
 			mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
 				5 * 60 * 60* 1000, 5, mlocListener); 
 		else 
 			mlocListener.onLocationChanged(Where);
-		
 
-/*
-		for (int i=0; i<urls.length; i++) {
-			try {
-				urls[i] = new URL("http://www.amazon.com/") ;
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		}
-		 */
-	//	new DoBackgroundTask().execute(urls);		// Run a job in a separate thread specified by an AsyncTask. 
-	//	doSomethingRepeatedly();		
-		
 		return START_STICKY;
 	}
-    
-	/*
-    private void doSomethingRepeatedly() {
-        timer.scheduleAtFixedRate( new TimerTask() {
-            public void run() {
-                Log.d("MyService", String.valueOf(++counter));
-            }
-        }, 0, UPDATE_INTERVAL );
-        //http://docs.oracle.com/javase/7/docs/api/java/util/Timer.html#scheduleAtFixedRate(java.util.TimerTask,%20long,%20long)
-        //In fixed-rate execution, each execution is scheduled relative to the scheduled execution time of the initial execution. 
-        //If an execution is delayed for any reason (such as garbage collection or other background activity), 
-        //two or more executions will occur in rapid succession to "catch up."
-    }*/
-	
-	/*
-    private int DownloadFile(URL url) {
-        try {
-            //---simulate taking some time to download a file---
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-             e.printStackTrace();
-        }
-        //---return an arbitrary number representing 
-        // the size of the file downloaded---
-        return 100;
-    }*/
 
-    /*
-    private class DoBackgroundTask extends AsyncTask<URL, Integer, Long> {
-    	
-        protected Long doInBackground(URL... urls) {
-            int count = urls.length;
-            long totalBytesDownloaded = 0;
-            for (int i = 0; i < count; i++) {
-                totalBytesDownloaded += DownloadFile(urls[i]);
-                //---calculate percentage downloaded and
-                // report its progress---
-                publishProgress((int) (((i+1) / (float) count) * 100));
-            }
-            return totalBytesDownloaded;
-        }*/
-
-        /*
-        protected void onProgressUpdate(Integer... progress) {
-            Log.d("MyService",  String.valueOf(progress[0]) + "% downloaded");
-            
-            //Toast.makeText(getBaseContext(),   String.valueOf(progress[0]) + "% downloaded", Toast.LENGTH_LONG).show();
-            Toast.makeText(MyService.this,   String.valueOf(progress[0]) + "% downloaded", Toast.LENGTH_LONG).show();
-           
-        }*/
-/*
-        protected void onPostExecute(Long result) {
-        	
-            //Toast.makeText(getBaseContext(),  "Downloaded " + result + " bytes", Toast.LENGTH_LONG).show(); //works
-        		Toast.makeText(MyService.this,  "Downloaded " + result + " bytes", Toast.LENGTH_LONG).show(); //works
-        	
-            Log.d("MyService", getBaseContext().toString());
-            Log.d("MyService", MyService.this.toString());
-            
-            stopSelf();  // a method of the surrounding service instance. 
-        }
-    }    /*
-  
-	/*
-		The onDestroy() method is called when the service is stopped using the stopService() method. 
-		This is where you clean up the resources used by your service.
-	 */
 	private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
         String strAdd = "";
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -415,7 +297,7 @@ public class MyService extends Service {
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
     	
-		//Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();		
+		//Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();
 
     	
 		return outputString;
@@ -433,44 +315,15 @@ public class MyService extends Service {
 
 		myThread = new Thread(new MyThread());
 		myThread.start();
-		
-		//For development, uses dummy tree
-/*		EventTree dummyTree = new EventTree();
-		dummyTree.insertLocation(new Event(5, "Pugsley's Pizza", "Place"));
-		dummyTree.insertEvent(new Event(6, "Pugsley's Pizza ","Contact", "Person McPersonface"));
-		dummyTree.insertEvent(new Event(7,"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
-		dummyTree.insertLocation(new Event(8, "Full Moon Pizza", "Place"));
-		dummyTree.insertEvent(new Event(9,"Full Moon Pizza","Place", "Person McNotPersonFace"));
-		dummyTree.insertEvent(new Event(10,"Full Moon Pizza","Place", "Fatso McNotPersonFace"));
-    	
-//		getOutput(dummyTree.root); */
-		//EventTree loaded = new EventTree();
- 
- 
+
 //		String save1 = "save1";
 	//	String open = "open";
 		
 //		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
 
-		
-		//Store( getApplication().getApplicationContext(), theTree, save1, open); 
+		//Store( getApplication().getApplicationContext(), theTree, save1, open);
 		/*loaded = Load(getApplication().getApplicationContext(), save1, open ); */
-		
-	/*	loaded.insertLocation(new Event(5, "Da Club", "Place"));
-		loaded.insertEvent(new Event(6, "Da Club","Contact", "Yo MAma"));
-		loaded.insertEvent(new Event(7,"Da Club","Contact", "HolyShit ItWerks"));*/
-		
-		
-		//For production, uses actual recorded data
-//		getOutput(theTree.root); 
-/*		getOutput(loaded.root);
-		ArrayList<String> outputStrings = new ArrayList<String>();		
-		for (int x=0; x<returnStrings.size(); x++)
-			outputStrings.add(generateOutputString(returnStrings.get(x)));
-	*/	
-		
-		
-		
+
 		/*
 		Intent dialogIntent = new Intent(getBaseContext(), FinalActivity.class);
 	
@@ -480,11 +333,8 @@ public class MyService extends Service {
 		*/
 		
 		Toast.makeText(this, "Stopped Recording", Toast.LENGTH_SHORT).show();		
-		
-		
-	
 	}
-    
+
     public void Store(Context context, EventTree tree, String prefName, String key)
     {
     	
@@ -510,14 +360,6 @@ public class MyService extends Service {
     	@Override 
     	public void run()
     	{
-    		
-//    		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-//    		LocationListener mlocListener = new MyLocationListener();
-    		// below updates on time interval (mill seconds) AND location (meters)
-//    		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-//    				5 * 1000, 0, mlocListener);
-    		
-    		
     		//For development, uses dummy tree
     		EventTree dummyTree = new EventTree();
     		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
@@ -539,7 +381,7 @@ public class MyService extends Service {
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace")); 
         
-//    		getOutput(dummyTree.root);*/
+//    		formatData(dummyTree.root);*/
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";
     		String save2 = "save2";
@@ -641,13 +483,4 @@ public class MyService extends Service {
 	   else 
 		   return true;
    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

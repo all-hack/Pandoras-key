@@ -16,10 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-//import android.widget.Toast;
 
 public class FinalActivityFragment extends Fragment{
 	ArrayList<String> outputStrings;
@@ -29,21 +27,17 @@ public class FinalActivityFragment extends Fragment{
 	String save1 = "save1";
 	String open = "open";
 
-
     @Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
-//		Toast.makeText(getActivity().getApplication(),getActivity().getApplication().toString(), Toast.LENGTH_SHORT).show();		
 		loaded = Load(getActivity().getApplication(), save1, open );
-		getOutput(loaded.root);
+		formatData(loaded.root);
 		ArrayList<String> moutputStrings = new ArrayList<String>();		
 		for (int x=0; x<returnStrings.size(); x++)
 			moutputStrings.add(generateOutputString(returnStrings.get(x)));
 		outputStrings = moutputStrings;  
-		
-		
 		
         setupAdapter();
     }
@@ -59,50 +53,17 @@ public class FinalActivityFragment extends Fragment{
 	}
     
 	void setupAdapter() 
-	{	
-		//Toast.makeText(getActivity().getApplication(), "please", Toast.LENGTH_SHORT).show();		
-
-		/*
-		loaded = Load(getActivity().getApplication(), save1, open );
-		getOutput(loaded.root);
-		ArrayList<String> moutputStrings = new ArrayList<String>();		
-		for (int x=0; x<returnStrings.size(); x++)
-			moutputStrings.add(generateOutputString(returnStrings.get(x)));
-		outputStrings = moutputStrings;*/
-		
+	{
 		if (getActivity() == null || mListView == null)
             return;
-
-		
 		if (outputStrings != null)
 			mListView.setAdapter(new ItemAdapter(outputStrings));
 		else
-		{
 			mListView.setAdapter(new ItemAdapter(new ArrayList<String>()));
-		}
 	}
 
-	private class ItemAdapter extends ArrayAdapter<String> 
-	{
-		public ItemAdapter(ArrayList<String> outputStrings) {
-			super(getActivity(), 0, outputStrings);
-		}
-		
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-
-			if (convertView == null)
-				convertView = getActivity().getLayoutInflater().inflate(R.layout.item_layout, parent, false);
-
-			TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
-			textView.setText(outputStrings.get(position));
-
-			return convertView;
-		}
-		
-	}
-	
-    public void getOutput(EventNode t)
+    //Formats raw data into workable structure
+    public void formatData(EventNode t)
     {
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
@@ -120,21 +81,19 @@ public class FinalActivityFragment extends Fragment{
 			}
 		}
 		if(t.right != null) {
-			getOutput(t.right);
+			formatData(t.right);
 		}
     }
-	
+
+    //Generates the string to be displayed on screen
     public String generateOutputString(Map<String, String> serviceOutput)
     {
     	String outputString = null;
     	String username = "Stephen";
     	
     	if (serviceOutput.get("kind") == "location")
-    	{
     		outputString = "You were at " + serviceOutput.get("locationName") + " at " + serviceOutput.get("timestamp");
-    		
-    	}
-    	
+
     	else if (serviceOutput.get("kind") == "text")
     	{
     		outputString = "Text message ";
@@ -164,20 +123,37 @@ public class FinalActivityFragment extends Fragment{
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
     	
-		//Toast.makeText(this, outputString, Toast.LENGTH_SHORT).show();		
-
-    	
 		return outputString;
     }
-	
-    
+
+    //Sets up text views
+    private class ItemAdapter extends ArrayAdapter<String>
+    {
+        public ItemAdapter(ArrayList<String> outputStrings) {
+            super(getActivity(), 0, outputStrings);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null)
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.item_layout, parent, false);
+
+            TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
+            textView.setText(outputStrings.get(position));
+
+            return convertView;
+        }
+
+    }
+
+    //Loads data into tree
 	public EventTree Load (Context context, String prefName, String key)
     {
     	SharedPreferences settings;
-    	
     	EventTree tree = new EventTree();
     	
-    	//get context 
+    	//get context
     	settings = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
     	
     	//key exist 
@@ -190,14 +166,14 @@ public class FinalActivityFragment extends Fragment{
     		tree = gson.fromJson(jsonTree, EventTree.class);    		
     	}
     	else 
-    	{
     		return null;
-    	}
-    	
+
     	return (EventTree) tree;
     	
     }
-	 String make()
+
+    //Creates timestamp
+	public String make()
 	   {
 		   Calendar calendar = Calendar.getInstance();
 		   int hour = calendar.get(Calendar.HOUR);
@@ -209,16 +185,12 @@ public class FinalActivityFragment extends Fragment{
 		   return time;
 	   }
 	   
-	   String am_pm (int pm)
+	   private String am_pm (int pm)
 	   {
 		   	if (pm == 1)
-		   	{
 		   		return "PM";
-		   	}
 		   	else
-		   	{
 		   		return "AM";
-		   	}
 	   }
-	
+
 }

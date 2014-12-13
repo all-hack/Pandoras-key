@@ -1,7 +1,6 @@
 package fordhamcss.pandorakey4;
 
 public class Event {
-	
 	// All events have below fields
 	private String time;
 	public String place;
@@ -9,12 +8,14 @@ public class Event {
 	public String contactName;
 	
 	public Event(String inTime, String inPlace, String inType) {
-		time = inTime;
+        //Constructor for location
+        time = inTime;
 		place = inPlace;
 		type = inType;
 	}
 	
 	public Event(String inTime, String inPlace, String inType, String inName) {
+        //Constructor for contact
 		time = inTime;
 		place = inPlace;
 		type = inType;
