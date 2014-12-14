@@ -312,7 +312,17 @@ public class MyService extends Service {
 
 //		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
 		mlocManager.removeUpdates(mlocListener);
+		
 
+		if (theTree == null)
+		{
+			double lat = Where.getLatitude();
+			double lon = Where.getLongitude();
+			Text = getCompleteAddressString(lat, lon);
+
+		}
+			
+		
 		myThread = new Thread(new MyThread());
 		myThread.start();
 
@@ -361,7 +371,7 @@ public class MyService extends Service {
     	public void run()
     	{
     		//For development, uses dummy tree
-    		EventTree dummyTree = new EventTree();
+    /*		EventTree dummyTree = new EventTree();
     		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
     		dummyTree.insertEvent(new Event(make(), "Pugsley's Pizza ","Contact", "Person McPersonface"));
     		dummyTree.insertEvent(new Event(make(),"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
@@ -380,19 +390,18 @@ public class MyService extends Service {
     		dummyTree.insertLocation(new Event(make(), "Full Moon Pizza", "Place"));
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace")); 
-        
+        */
 //    		formatData(dummyTree.root);*/
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";
     		String save2 = "save2";
     		String save3 = "save3";
     		String save4 = "save4";
-    		String save5 = "save5";
+    		String save5 = "save5"; 
     		String open = "open";
     		/*loaded = Load(getApplication().getApplicationContext(), save1, open ); */
 
-    		//if(Load(getApplication().getApplicationContext(), save1, open) )
-    		Store(getApplication().getApplicationContext(), dummyTree, save1, open);
+    		Store(getApplication().getApplicationContext(), theTree, save1, open);
 
 //    		Store(getApplication().getApplicationContext(), theTree, save1, open);
     		

@@ -33,7 +33,7 @@ public class FinalActivityFragment extends Fragment{
 		setRetainInstance(true);
 
 		loaded = Load(getActivity().getApplication(), save1, open );
-		formatData(loaded.root);
+		getOutput(loaded.root);
 		ArrayList<String> moutputStrings = new ArrayList<String>();		
 		for (int x=0; x<returnStrings.size(); x++)
 			moutputStrings.add(generateOutputString(returnStrings.get(x)));
@@ -62,14 +62,43 @@ public class FinalActivityFragment extends Fragment{
 			mListView.setAdapter(new ItemAdapter(new ArrayList<String>()));
 	}
 
+    //Sets up text views
+    private class ItemAdapter extends ArrayAdapter<String>
+    {
+        public ItemAdapter(ArrayList<String> outputStrings) {
+            super(getActivity(), 0, outputStrings);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null)
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.item_layout, parent, false);
+
+            TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
+            
+            textView.setText(outputStrings.get(position));
+            
+
+            return convertView;
+        }
+
+    }
+    
+   
+    
+	
     //Formats raw data into workable structure
-    public void formatData(EventNode t)
+    public void getOutput(EventNode t)
     {
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
     	locOutput.put("locationName" ,  t.theEvent.get(0).place);
     	locOutput.put("timestamp" , t.theEvent.get(0).getTime());
+    	System.out.println("test1");
     	returnStrings.add(locOutput);
+    	System.out.println("test2");
+
     	
 	    if(t.left != null) {
 			for(int i=0; i < t.left.theEvent.size(); i++) {
@@ -77,11 +106,16 @@ public class FinalActivityFragment extends Fragment{
 		    	tempServiceOutput.put("kind" , "contact");
 		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).getContactName());
 		    	tempServiceOutput.put("timestamp" , t.left.theEvent.get(i).getTime());
+		    	
+		    	System.out.println("test3");
+
 		    	returnStrings.add(tempServiceOutput);
+		    	System.out.println("test4");
+
 			}
 		}
 		if(t.right != null) {
-			formatData(t.right);
+			getOutput(t.right);
 		}
     }
 
@@ -123,28 +157,8 @@ public class FinalActivityFragment extends Fragment{
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
     	
+    	
 		return outputString;
-    }
-
-    //Sets up text views
-    private class ItemAdapter extends ArrayAdapter<String>
-    {
-        public ItemAdapter(ArrayList<String> outputStrings) {
-            super(getActivity(), 0, outputStrings);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            if (convertView == null)
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.item_layout, parent, false);
-
-            TextView textView = (TextView) convertView.findViewById(R.id.item_layout_textView);
-            textView.setText(outputStrings.get(position));
-
-            return convertView;
-        }
-
     }
 
     //Loads data into tree
@@ -173,7 +187,7 @@ public class FinalActivityFragment extends Fragment{
     }
 
     //Creates timestamp
-	public String make()
+	String make()
 	   {
 		   Calendar calendar = Calendar.getInstance();
 		   int hour = calendar.get(Calendar.HOUR);
@@ -185,7 +199,7 @@ public class FinalActivityFragment extends Fragment{
 		   return time;
 	   }
 	   
-	   private String am_pm (int pm)
+	   String am_pm (int pm)
 	   {
 		   	if (pm == 1)
 		   		return "PM";

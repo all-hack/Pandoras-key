@@ -27,13 +27,15 @@ public class MainActivity extends Activity {
             // Restore value of members from saved state
             
             present = savedInstanceState.getBoolean(SAVE_BUNDLE);
-        } else {
+        } 
+        else 
+        {
             present = false;
         }
         setContentView(R.layout.activity_main);
     }
 
-    public void openReport()
+    public void openReport(View view)
     {
     	
 		Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
@@ -41,18 +43,20 @@ public class MainActivity extends Activity {
         
     }
     
-    public void startService() 
+    public void startService(View view) 
     {    	
     	if (present == false)
     	{
+
     		startService(new Intent(getBaseContext(), MyService.class));
     		present = true;
     	}
         
     }
     
-    public void stopService() 
+    public void stopService(View view) 
     {    	
+    	present = false;
         stopService(new Intent(getBaseContext(), MyService.class));
     }
     
@@ -72,13 +76,20 @@ public class MainActivity extends Activity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_item_old_reports:
-            	openReport();
-                return true;
+            	Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
+            	startActivity(dialogIntent);
+            	return true;
             case R.id.menu_item_start:
-            	startService();
-                return true;
+            	if (present == false)
+            	{
+
+            		startService(new Intent(getBaseContext(), MyService.class));
+            		present = true;
+            	}                
+            	return true;
             case R.id.menu_item_stop:
-            	stopService();
+            	present = false;
+                stopService(new Intent(getBaseContext(), MyService.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
