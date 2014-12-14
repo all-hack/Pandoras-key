@@ -32,16 +32,37 @@ public class FinalActivityFragment extends Fragment{
         super.onCreate(savedInstanceState);
 		setRetainInstance(true);
 
-		loaded = Load(getActivity().getApplication(), save1, open );
-		getOutput(loaded.root);
 		ArrayList<String> moutputStrings = new ArrayList<String>();		
-		for (int x=0; x<returnStrings.size(); x++)
-			moutputStrings.add(generateOutputString(returnStrings.get(x)));
-		outputStrings = moutputStrings;  
+		loaded = Load(getActivity().getApplication(), save1, open );
+		if (check(loaded.root) == false)
+		{
+			getOutput(loaded.root);			
+			for (int x=0; x<returnStrings.size(); x++)
+				moutputStrings.add(generateOutputString(returnStrings.get(x)));
+			
+
+		}
+		else
+		{			
+			moutputStrings.add(loaded.root.theEvent.getFirst().getPlace());
+		}
 		
+		outputStrings = moutputStrings;  
+
         setupAdapter();
     }
 
+    
+    public Boolean check(EventNode t)
+    {
+    	if (t.theEvent.getFirst().getTime() == null)
+    		return true;
+    	else
+    	return false;
+    	
+    }
+    
+    
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
 	{
 		View v = inflater.inflate(R.layout.activity_final, container, false);
@@ -91,13 +112,12 @@ public class FinalActivityFragment extends Fragment{
     //Formats raw data into workable structure
     public void getOutput(EventNode t)
     {
+		
     	Map<String, String> locOutput = new HashMap<String, String>();
     	locOutput.put("kind" , "location");
     	locOutput.put("locationName" ,  t.theEvent.get(0).place);
     	locOutput.put("timestamp" , t.theEvent.get(0).getTime());
-    	System.out.println("test1");
     	returnStrings.add(locOutput);
-    	System.out.println("test2");
 
     	
 	    if(t.left != null) {
@@ -107,10 +127,8 @@ public class FinalActivityFragment extends Fragment{
 		    	tempServiceOutput.put("name" , t.left.theEvent.get(i).getContactName());
 		    	tempServiceOutput.put("timestamp" , t.left.theEvent.get(i).getTime());
 		    	
-		    	System.out.println("test3");
 
 		    	returnStrings.add(tempServiceOutput);
-		    	System.out.println("test4");
 
 			}
 		}
@@ -157,6 +175,9 @@ public class FinalActivityFragment extends Fragment{
     		outputString = "Added new contact, " + serviceOutput.get("name") + " at " + serviceOutput.get("timestamp"); 
     	}
     	
+    	
+		
+		
     	
 		return outputString;
     }

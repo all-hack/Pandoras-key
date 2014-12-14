@@ -82,13 +82,16 @@ public class MyService extends Service {
 		 mlocListener = new MyLocationListener();
 		// below updates on time interval (mill seconds) AND location (meters)		
 		
-		Where = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
+//		Where = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
 
 		if (test == false)
+		{
 			mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-				5 * 60 * 60* 1000, 5, mlocListener); 
+				5 * 60 * 60* 1000, 5, mlocListener);
+		}
+		
 		else 
-			mlocListener.onLocationChanged(Where);
+		{	mlocListener.onLocationChanged(Where);}
 
 		return START_STICKY;
 	}
@@ -313,15 +316,20 @@ public class MyService extends Service {
 //		Toast.makeText( getApplicationContext(), "before store", Toast.LENGTH_SHORT).show();
 		mlocManager.removeUpdates(mlocListener);
 		
+		System.out.println("The tree is: "+theTree.toString());
+//		System.out.println("The tree is: "+theTree.root.toString());
+//		System.out.println("The tree is: "+theTree.root.theEvent.toString());
+//		System.out.println("The tree is: "+theTree.root.theEvent.size());
 
-		if (theTree == null)
+		if (theTree.root == null )
 		{
-			double lat = Where.getLatitude();
-			double lon = Where.getLongitude();
-			Text = getCompleteAddressString(lat, lon);
-
-		}
+			String time = make();
+			Event newPlace = new Event(null, "We are sorry for the inconvinience, but you gotta give us enough time to triangilate your coordinates! Go back and try again", "Place");
+			theTree.insertLocation(newPlace);
 			
+			
+		}
+
 		
 		myThread = new Thread(new MyThread());
 		myThread.start();
@@ -394,10 +402,7 @@ public class MyService extends Service {
 //    		formatData(dummyTree.root);*/
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";
-    		String save2 = "save2";
-    		String save3 = "save3";
-    		String save4 = "save4";
-    		String save5 = "save5"; 
+
     		String open = "open";
     		/*loaded = Load(getApplication().getApplicationContext(), save1, open ); */
 

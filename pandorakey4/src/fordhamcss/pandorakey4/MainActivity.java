@@ -75,22 +75,26 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.menu_item_old_reports:
-            	Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
-            	startActivity(dialogIntent);
-            	return true;
-            case R.id.menu_item_start:
-            	if (present == false)
-            	{
-
-            		startService(new Intent(getBaseContext(), MyService.class));
-            		present = true;
-            	}                
-            	return true;
-            case R.id.menu_item_stop:
+	        case R.id.menu_item_start:
+	        	if (present == false)
+	        	{
+	
+	        		startService(new Intent(getBaseContext(), MyService.class));
+	        		present = true;
+	        	}                
+	        	return true;
+	        
+	        case R.id.menu_item_stop:
             	present = false;
                 stopService(new Intent(getBaseContext(), MyService.class));
                 return true;
+	        
+	        case R.id.menu_item_old_reports:
+            	Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
+            	startActivity(dialogIntent);
+            	return true;
+            
+           
             default:
                 return super.onOptionsItemSelected(item);
         }

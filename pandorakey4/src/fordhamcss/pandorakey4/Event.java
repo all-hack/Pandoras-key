@@ -2,10 +2,10 @@ package fordhamcss.pandorakey4;
 
 public class Event {
 	// All events have below fields
-	private String time;
-	public String place;
-	private String type;
-	public String contactName;
+	private String time =null;
+	public String place=null;
+	private String type =null;
+	public String contactName=null;
 	
 	public Event(String inTime, String inPlace, String inType) {
         //Constructor for location
