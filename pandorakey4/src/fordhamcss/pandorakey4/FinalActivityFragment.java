@@ -65,6 +65,8 @@ public class FinalActivityFragment extends Fragment{
     
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
 	{
+        getActivity().getActionBar().setIcon(R.drawable.open_chest);
+
 		View v = inflater.inflate(R.layout.activity_final, container, false);
 		mListView = (ListView) v.findViewById(R.id.listView);
 

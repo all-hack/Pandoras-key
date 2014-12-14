@@ -90,7 +90,10 @@ public class MyService extends Service {
 //		When  = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
 //		Why = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
 	//	Whom = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
-		 
+		
+	//	Where.setLongitude(40);
+		//Where.setLatitude(30);
+		
 		//String time = make();
 		Event newPlace = new Event(null, "We are sorry for the inconvinience, but you gotta give us enough time to triangilate your coordinates! Go back and try again", "Place");
 		theTree.insertLocation(newPlace);
@@ -100,7 +103,7 @@ public class MyService extends Service {
 		if (test == false)
 		{
 			mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-				5 * 60 * 60* 1000, 5, mlocListener);
+				5 *60 * 60 * 1000, 0, mlocListener);
 		}
 		else 
 		{	
