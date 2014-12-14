@@ -45,12 +45,16 @@ public class MyService extends Service {
 	LocationManager mlocManager;
 	LocationListener mlocListener;
 
+	Location Why = null;
+	Location Whom = null;
+	Location When = null;
 	Location Where = null;
 	String CurrentLocation = null;
 	String Text;
 	LinkedList<String> CurrLocation = new LinkedList<String>();
 	LinkedList<String> CurrContact = new LinkedList<String>();
 	
+	Boolean firstTime = true;
 	EventTree theTree = new EventTree();
 	List<Map<String, String>> returnStrings = new ArrayList<Map<String, String>>();
 
@@ -83,15 +87,28 @@ public class MyService extends Service {
 		// below updates on time interval (mill seconds) AND location (meters)		
 		
 //		Where = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
-
+//		When  = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
+//		Why = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
+	//	Whom = mlocManager.getLastKnownLocation(mlocManager.GPS_PROVIDER);
+		 
+		//String time = make();
+		Event newPlace = new Event(null, "We are sorry for the inconvinience, but you gotta give us enough time to triangilate your coordinates! Go back and try again", "Place");
+		theTree.insertLocation(newPlace);
+				
+				
+			
 		if (test == false)
 		{
 			mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
 				5 * 60 * 60* 1000, 5, mlocListener);
 		}
-		
 		else 
-		{	mlocListener.onLocationChanged(Where);}
+		{	
+			mlocListener.onLocationChanged(Where);
+//			mlocListener.onLocationChanged(When);
+			//mlocListener.onLocationChanged(Why);
+		//	mlocListener.onLocationChanged(Whom);
+		}
 
 		return START_STICKY;
 	}
@@ -182,6 +199,13 @@ public class MyService extends Service {
 	
 			if (CurrentLocation == null) {
 				
+				if (firstTime == true)
+					{
+						firstTime = false;
+						theTree = new EventTree();
+					}
+				
+				
 //				Toast.makeText( getApplicationContext(), "05:"+CurrentLocation, Toast.LENGTH_SHORT).show();
 				CurrentLocation = Text;
 				Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
@@ -196,6 +220,11 @@ public class MyService extends Service {
 			
 			if(CurrentLocation != Text )
 			{
+				if (firstTime == true)
+				{
+					firstTime = false;
+					theTree = new EventTree();
+				}
 				CurrentLocation = Text;		
 					Toast.makeText( getApplicationContext(), CurrentLocation, Toast.LENGTH_SHORT).show();
 				CurrLocation.add(CurrentLocation);
@@ -207,7 +236,9 @@ public class MyService extends Service {
 		
 			else if(CurrentLocation == Text)
 			{
+				
 				Toast.makeText(getApplicationContext(), "you are in the same place", Toast.LENGTH_SHORT).show();
+				
 			}
     	
     	
@@ -321,14 +352,7 @@ public class MyService extends Service {
 //		System.out.println("The tree is: "+theTree.root.theEvent.toString());
 //		System.out.println("The tree is: "+theTree.root.theEvent.size());
 
-		if (theTree.root == null )
-		{
-			String time = make();
-			Event newPlace = new Event(null, "We are sorry for the inconvinience, but you gotta give us enough time to triangilate your coordinates! Go back and try again", "Place");
-			theTree.insertLocation(newPlace);
-			
-			
-		}
+		
 
 		
 		myThread = new Thread(new MyThread());
@@ -379,7 +403,7 @@ public class MyService extends Service {
     	public void run()
     	{
     		//For development, uses dummy tree
-    /*		EventTree dummyTree = new EventTree();
+    		EventTree dummyTree = new EventTree();
     		dummyTree.insertLocation(new Event(make(), "Pugsley's Pizza", "Place"));
     		dummyTree.insertEvent(new Event(make(), "Pugsley's Pizza ","Contact", "Person McPersonface"));
     		dummyTree.insertEvent(new Event(make(),"Pugsley's Pizza ","Contact", "Fatso McPersonface"));
@@ -398,7 +422,8 @@ public class MyService extends Service {
     		dummyTree.insertLocation(new Event(make(), "Full Moon Pizza", "Place"));
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Person McNotPersonFace"));
     		dummyTree.insertEvent(new Event(make(),"Full Moon Pizza","Place", "Fatso McNotPersonFace")); 
-        */
+        
+    		
 //    		formatData(dummyTree.root);*/
 //    		EventTree loaded = new EventTree();
     		String save1 = "save1";

@@ -2,6 +2,7 @@
 
 package fordhamcss.pandorakey4;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         
         
         
@@ -75,6 +77,16 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+	       
+	        
+	        case R.id.menu_item_old_reports:
+            	Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
+            	startActivity(dialogIntent);
+            	return true;
+	        case R.id.menu_item_stop:
+            	present = false;
+                stopService(new Intent(getBaseContext(), MyService.class));
+                return true;
 	        case R.id.menu_item_start:
 	        	if (present == false)
 	        	{
@@ -84,16 +96,7 @@ public class MainActivity extends Activity {
 	        	}                
 	        	return true;
 	        
-	        case R.id.menu_item_stop:
-            	present = false;
-                stopService(new Intent(getBaseContext(), MyService.class));
-                return true;
-	        
-	        case R.id.menu_item_old_reports:
-            	Intent dialogIntent = new Intent(MainActivity.this, FinalActivity.class);
-            	startActivity(dialogIntent);
-            	return true;
-            
+	       
            
             default:
                 return super.onOptionsItemSelected(item);

@@ -4,19 +4,19 @@
     <item 
         android:id="@+id/menu_item_old_reports"
         android:title="@string/previousReport"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="never"
         />
     
      <item 
         android:id="@+id/menu_item_start"
         android:title="@string/startTracking"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="never"
         />
       
      <item 
         android:id="@+id/menu_item_stop"
         android:title="@string/stopTracking"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="never"
         />
 
 </menu>
